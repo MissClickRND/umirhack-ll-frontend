@@ -1,5 +1,5 @@
-import { Error404 } from "@/pages/errors/Error404";
-import { Main } from "@/pages/main";
+import { Error404 } from "@/pages/Errors/Error404";
+import { Main } from "@/pages/Main";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { Login, Register } from "@/pages/auth";

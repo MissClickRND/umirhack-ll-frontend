@@ -4,7 +4,6 @@ import {
   Button,
   Avatar,
   Menu,
-  Image,
   Container,
   UnstyledButton,
   Box,
