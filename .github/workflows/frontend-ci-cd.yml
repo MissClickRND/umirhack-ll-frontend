@@ -85,7 +85,7 @@ jobs:
           script: |
             set -euo pipefail
             TMP_ROOT="/tmp/umirhack-frontend-dist"
-            DEPLOY_PATH="${FRONTEND_DEPLOY_PATH:-/var/www/umirhack-frontend}"
+            DEPLOY_PATH="${FRONTEND_DEPLOY_PATH:-/var/www/umirhack-frontend/umithack-ll-frontend}"
 
             if command -v sudo >/dev/null 2>&1; then
               SUDO="sudo"
