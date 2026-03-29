@@ -6,7 +6,7 @@ export default function Main() {
     <Box w="100vw" bg="blue">
       <Text py={50} ta="center" fz={28} c="white">
         <IconHome />
-        Главная страница сайта
+        Главная страница сайта с ci/cd
       </Text>
     </Box>
   );
