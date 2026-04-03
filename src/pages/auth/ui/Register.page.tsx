@@ -13,6 +13,8 @@ import {
   TextInput,
   LoadingOverlay,
   Paper,
+  Grid,
+  Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
@@ -59,101 +61,51 @@ export default function Register() {
   };
 
   return (
-    <Box
-      mih="100vh"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "var(--mantine-color-gray-0)",
-      }}
-    >
-      <Paper w={500} p="lg" radius="md" shadow="md">
+    <Grid.Col span={{ base: 12, md: 6 }}>
+      <Paper p={40} radius="lg" shadow="xl" withBorder>
         <LoadingOverlay visible={isLoading} />
         <Stack gap="xl">
-          {/* Лого */}
           <Center>
-            <Text
-              ff="'Playfair Display', serif"
-              fw={400}
-              fz={36}
-              c="primary.6"
-              style={{ letterSpacing: "4px", textTransform: "uppercase" }}
-            >
-              La Maison
-            </Text>
+            <Title order={2}>
+              Зарегистрироваться
+            </Title>
           </Center>
 
-          <Box w={40} h={1} bg="primary.6" mx="auto" />
-
-          <Text
-            fz="sm"
-            c="dark.4"
-            ta="center"
-            style={{ letterSpacing: "1px", textTransform: "uppercase" }}
-          >
-            Регистрация
-          </Text>
-
-          {/* Форма */}
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack gap="md">
               <TextInput
+                size="md"
                 label="Email"
                 placeholder="user@example.com"
-                radius={0}
-                styles={{
-                  label: {
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    fontSize: 11,
-                    marginBottom: 6,
-                  },
-                  input: { borderColor: "var(--mantine-color-gray-4)" },
-                }}
+                radius={'sm'}
+                styles={{label: {marginBottom: 6}}}
                 {...form.getInputProps("email")}
               />
 
               <PasswordInput
+                size="md"
                 label="Пароль"
                 placeholder="Минимум 4 символа"
-                radius={0}
-                styles={{
-                  label: {
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    fontSize: 11,
-                    marginBottom: 6,
-                  },
-                  input: { borderColor: "var(--mantine-color-gray-4)" },
-                }}
+                radius={'sm'}
+                styles={{label: {marginBottom: 6}}}
                 {...form.getInputProps("password")}
               />
 
               <PasswordInput
+                size="md"
                 label="Подтверждение пароля"
                 placeholder="Повторите пароль"
-                radius={0}
-                styles={{
-                  label: {
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    fontSize: 11,
-                    marginBottom: 6,
-                  },
-                  input: { borderColor: "var(--mantine-color-gray-4)" },
-                }}
+                radius={'sm'}
+                styles={{label: {marginBottom: 6}}}
                 {...form.getInputProps("confirmPassword")}
               />
 
               <Button
                 type="submit"
                 fullWidth
-                radius={0}
-                color="primary.6"
+                radius={'md'}
                 mt="sm"
                 size="md"
-                style={{ letterSpacing: "2px", textTransform: "uppercase" }}
               >
                 Создать аккаунт
               </Button>
@@ -173,6 +125,6 @@ export default function Register() {
           </Text>
         </Stack>
       </Paper>
-    </Box>
+    </Grid.Col>
   );
 }

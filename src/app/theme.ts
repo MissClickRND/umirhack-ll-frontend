@@ -22,6 +22,7 @@ export const theme = createTheme({
   primaryShade: 4, // Индекс #E31C79
 
   other: {
+    background: '#F5F7FC',
     surfaceSecondary: '#F0F3FA',
     textPrimary: '#0E1730',
     textSecondary: '#66708A',
