@@ -1,11 +1,9 @@
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "@/entities/user";
-
 import { ILoginRequest } from "@/entities/auth/model/type";
 import { useAppDispatch, useNotifications } from "@/shared/lib";
 import {
-  Box,
   Button,
   Center,
   Anchor,

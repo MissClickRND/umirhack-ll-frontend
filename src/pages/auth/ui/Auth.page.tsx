@@ -5,7 +5,6 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import Description from "./components/Description";
-import Choose from "./components/Choose";
 import { Outlet } from "react-router-dom";
 
 
