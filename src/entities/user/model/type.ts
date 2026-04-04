@@ -11,6 +11,7 @@ export interface IUserState {
   email?: string;
   role?: UserRole;
   universityId?: number | null;
+  university_id?: number | null;
   createdAt?: Date;
   updatedAt?: Date;
 }

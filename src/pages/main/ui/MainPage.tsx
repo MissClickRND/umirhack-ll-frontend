@@ -38,7 +38,7 @@ export default function Main() {
         <SearchDiploma onResult={handleResult} />
         {hasSearched && (
           <Result
-            status={Boolean(searchResult)}
+            status={searchResult?.status}
             studentName={searchResult?.fullNameAuthor ?? ""}
             specialty={searchResult?.specialty ?? ""}
             institution={searchResult?.university?.name ?? ""}

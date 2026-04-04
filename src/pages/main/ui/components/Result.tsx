@@ -9,7 +9,7 @@ import {
   ThemeIcon,
   Stack,
 } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 
 interface ResultProps {
   studentName?: string;
@@ -17,16 +17,16 @@ interface ResultProps {
   institution?: string;
   graduationYear?: string;
   degree?: string;
-  status?: boolean;
+  status?: string;
 }
 
 export default function Result({
-  studentName = "Иванов Александр Сергеевич",
-  specialty = "Программная инженерия (09.03.04)",
-  institution = "Московский Государственный Технический Университет",
-  graduationYear = "2022",
-  degree = "Бакалавр",
-  status = true,
+  studentName,
+  specialty,
+  institution,
+  graduationYear,
+  degree,
+  status,
 }: ResultProps) {
   return (
     <Paper p={24} radius="lg" withBorder w={"100%"}>
@@ -45,23 +45,29 @@ export default function Result({
             radius="xl"
             fw={600}
             leftSection={
-              status ? (
+              status === "VALID" ? (
                 <ThemeIcon size={14} radius="xl" color="green" variant="filled">
                   <IconCheck />
                 </ThemeIcon>
-              ) : null
+              ) : (
+                <ThemeIcon size={14} radius="xl" variant="filled">
+                  <IconX />
+                </ThemeIcon>
+              )
             }
             style={{
-              backgroundColor: status
-                ? "var(--mantine-color-green-0)"
-                : "var(--mantine-color-red-0)",
-              color: status
-                ? "var(--mantine-color-green-9)"
-                : "var(--mantine-color-red-9)",
+              backgroundColor:
+                status === "VALID"
+                  ? "var(--mantine-color-green-0)"
+                  : "var(--mantine-color-red-0)",
+              color:
+                status === "VALID"
+                  ? "var(--mantine-color-green-9)"
+                  : "var(--mantine-color-red-9)",
               padding: "0 16px",
             }}
           >
-            {status ? "ДЕЙСТВИТЕЛЕН" : "НЕ НАЙДЕН"}
+            {status === "VALID" ? "Действителен" : "Недействителен"}
           </Badge>
         </Group>
 

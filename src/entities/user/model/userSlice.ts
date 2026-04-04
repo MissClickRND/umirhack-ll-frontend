@@ -18,7 +18,8 @@ export const userSlice = createSlice({
       state.id = action.payload.id;
       state.email = action.payload.email;
       state.role = action.payload.role;
-      state.universityId = action.payload.universityId ?? null;
+      state.universityId =
+        action.payload.universityId ?? action.payload.university_id ?? null;
       state.createdAt = action.payload.createdAt;
       state.updatedAt = action.payload.updatedAt;
     },
