@@ -9,6 +9,8 @@ import {
   Divider,
   ThemeIcon,
   Stack,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
@@ -29,6 +31,10 @@ export default function Result({
   degree,
   status,
 }: ResultProps) {
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
+
   const degreeLabel =
     degree && degree in DegreeLevel
       ? DegreeLevel[degree as keyof typeof DegreeLevel]
@@ -45,14 +51,26 @@ export default function Result({
           </Stack>
 
           <Badge
-            color="green"
+            color={status === "VALID" ? "green" : "red"}
             variant="light"
             size="lg"
             radius="xl"
             fw={600}
             leftSection={
               status === "VALID" ? (
-                <ThemeIcon size={14} radius="xl" color="green" variant="filled">
+                <ThemeIcon
+                  size={14}
+                  radius="xl"
+                  variant="filled"
+                  style={{
+                    backgroundColor: isDark
+                      ? "var(--mantine-color-green-7)"
+                      : "var(--mantine-color-green-6)",
+                    color: isDark
+                      ? theme.other.textPrimaryDark
+                      : theme.white,
+                  }}
+                >
                   <IconCheck />
                 </ThemeIcon>
               ) : (
@@ -64,12 +82,20 @@ export default function Result({
             style={{
               backgroundColor:
                 status === "VALID"
-                  ? "var(--mantine-color-green-0)"
-                  : "var(--mantine-color-red-0)",
+                  ? isDark
+                    ? "rgba(64, 192, 87, 0.18)"
+                    : "var(--mantine-color-green-0)"
+                  : isDark
+                    ? "rgba(250, 82, 82, 0.18)"
+                    : "var(--mantine-color-red-0)",
               color:
                 status === "VALID"
-                  ? "var(--mantine-color-green-9)"
-                  : "var(--mantine-color-red-9)",
+                  ? isDark
+                    ? "var(--mantine-color-green-2)"
+                    : "var(--mantine-color-green-9)"
+                  : isDark
+                    ? "var(--mantine-color-red-2)"
+                    : "var(--mantine-color-red-9)",
               padding: "0 16px",
             }}
           >

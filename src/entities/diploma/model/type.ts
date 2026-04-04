@@ -82,6 +82,21 @@ export interface IDiploma {
   university: IUniversityShort;
 }
 
+export interface IDiplomaByQrTokenResponse {
+  id: number;
+  fullNameAuthor: string;
+  registrationNumber: string;
+  userId: number;
+  universityId: number;
+  issuedAt: string;
+  specialty: string;
+  degreeLevel: DegreeLevel;
+  status: DiplomaStatus;
+  createdAt: string;
+  updatedAt: string;
+  university: IUniversityInfo;
+}
+
 export interface IUniversityShort {
     id: number,
     name: string,

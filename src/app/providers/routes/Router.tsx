@@ -10,6 +10,7 @@ import UniversityRegister from "@/pages/auth/ui/UniversityRegister.page";
 import Admin from "@/pages/admin/ui/Admin.page";
 import EduPanelPage from "@/pages/edu-panel/ui/EduPanel.page";
 import PublicApiPage from "@/pages/public-api/ui/PublicApi.page";
+import ResultPage from "@/pages/result/ui/Result.page";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
         path: "/edu-panel",
         element: <EduPanelPage />,
       },
+      {
+        path: '/:token',
+        element: <ResultPage />,
+      }
     ],
   },
 

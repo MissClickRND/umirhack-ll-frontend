@@ -20,6 +20,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconClockHour4 } from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
 
 import { useNavigate } from "react-router-dom";
 
@@ -37,9 +38,16 @@ export default function UniversityRegister() {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
+  const isCompactLaptop = useMediaQuery("(max-width: 90em)");
+  const isShortViewport = useMediaQuery("(max-height: 52em)");
+  const isDense = isCompactLaptop || isShortViewport;
   const [register, { isLoading }] = useUniversityRegisterMutation();
   const dispatch = useAppDispatch();
   const { showError, showSuccess } = useNotifications();
+  const inputSize = isDense ? "sm" : "md";
+  const actionsSize = isDense ? "sm" : "md";
+  const contentGap = isDense ? "sm" : "lg";
+  const formGap = isDense ? "sm" : "md";
 
   const form = useForm<RegisterFormValues>({
     initialValues: {
@@ -88,24 +96,24 @@ export default function UniversityRegister() {
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
       <Paper
-        p={{ base: 20, sm: 28, md: 40 }}
+        p={{ base: 14, sm: 18, md: 22, lg: 28 }}
         radius="lg"
         shadow="xl"
         withBorder
       >
         <LoadingOverlay visible={isLoading} />
-        <Stack gap="xl">
+        <Stack gap={contentGap}>
           <Center>
-            <Title order={2}>Зарегистрироваться</Title>
+            <Title order={isDense ? 3 : 2}>Зарегистрироваться</Title>
           </Center>
 
           {user.role !== "NEED_VERIFICATION" && (
             <>
               {" "}
               <form onSubmit={form.onSubmit(handleSubmit)}>
-                <Stack gap="md">
+                <Stack gap={formGap}>
                   <TextInput
-                    size="md"
+                    size={inputSize}
                     label="Название вуза"
                     placeholder="Южный федеральный университет"
                     radius={"sm"}
@@ -114,7 +122,7 @@ export default function UniversityRegister() {
                   />
 
                   <TextInput
-                    size="md"
+                    size={inputSize}
                     label="Краткое название вуза"
                     placeholder="ДГТУ"
                     radius={"sm"}
@@ -123,7 +131,7 @@ export default function UniversityRegister() {
                   />
 
                   <TextInput
-                    size="md"
+                    size={inputSize}
                     label="Email"
                     placeholder="user@example.com"
                     radius={"sm"}
@@ -132,7 +140,7 @@ export default function UniversityRegister() {
                   />
 
                   <Paper
-                    p="sm"
+                    p={isDense ? "xs" : "sm"}
                     radius="md"
                     withBorder
                     style={{
@@ -151,7 +159,7 @@ export default function UniversityRegister() {
                   </Paper>
 
                   <PasswordInput
-                    size="md"
+                    size={inputSize}
                     label="Пароль"
                     placeholder="Минимум 4 символа"
                     radius={"sm"}
@@ -160,7 +168,7 @@ export default function UniversityRegister() {
                   />
 
                   <PasswordInput
-                    size="md"
+                    size={inputSize}
                     label="Подтверждение пароля"
                     placeholder="Повторите пароль"
                     radius={"sm"}
@@ -172,8 +180,8 @@ export default function UniversityRegister() {
                     type="submit"
                     fullWidth
                     radius={"md"}
-                    mt="sm"
-                    size="md"
+                    mt={isDense ? 4 : "sm"}
+                    size={actionsSize}
                   >
                     Создать аккаунт
                   </Button>

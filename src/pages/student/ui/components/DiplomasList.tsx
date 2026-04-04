@@ -1,4 +1,16 @@
-import { Badge, Box, Button, Group, Loader, Paper, Stack, Table, Text, Title } from "@mantine/core";
+import {
+    Badge,
+    Box,
+    Button,
+    Group,
+    Loader,
+    Paper,
+    Stack,
+    Table,
+    Text,
+    Title,
+    useMantineColorScheme,
+} from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconPlus, IconShare } from "@tabler/icons-react";
 import { useState } from "react";
@@ -14,6 +26,8 @@ import { useGetUserDiplomasQuery } from "@/entities/diploma";
 
 export default function DiplomasList() {
     const isMobile = useMediaQuery("(max-width: 64em)");
+    const { colorScheme } = useMantineColorScheme();
+    const isDark = colorScheme === "dark";
     const user = useAppSelector(selectUser);
     const [opened, { open, close }] = useDisclosure(false);
     const [shareOpened, { open: openShare, close: closeShare }] = useDisclosure(false);
@@ -32,8 +46,20 @@ export default function DiplomasList() {
     }));
 
     const getStatusStyles = (status: boolean) => ({
-        backgroundColor: status ? "var(--mantine-color-green-0)" : "var(--mantine-color-red-0)",
-        color: status ? "var(--mantine-color-green-9)" : "var(--mantine-color-red-9)",
+        backgroundColor: status
+            ? isDark
+                ? "rgba(64, 192, 87, 0.18)"
+                : "var(--mantine-color-green-0)"
+            : isDark
+                ? "rgba(250, 82, 82, 0.18)"
+                : "var(--mantine-color-red-0)",
+        color: status
+            ? isDark
+                ? "var(--mantine-color-green-2)"
+                : "var(--mantine-color-green-9)"
+            : isDark
+                ? "var(--mantine-color-red-2)"
+                : "var(--mantine-color-red-9)",
         padding: "0 16px",
     });
 

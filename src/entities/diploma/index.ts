@@ -4,6 +4,8 @@ export {
   useUpdateDiplomaStatusMutation,
   useGetDiplomaByIdQuery,
   useLazyGetDiplomaByIdQuery,
+  useGetDiplomaByQrTokenQuery,
+  useLazyGetDiplomaByQrTokenQuery,
   useGetUserDiplomasQuery,
   useCreateDiplomaQrTokenMutation,
   useRevokeDiplomaQrTokenMutation,
@@ -26,6 +28,7 @@ export type {
   IUniversityDiplomasResponse,
   IUpdateDiplomaStatusPayload,
   IDiploma,
+  IDiplomaByQrTokenResponse,
   IUniversityShort,
   QrTokenType,
 } from "./model/type";

@@ -4,6 +4,7 @@ import {
   ICreateQrTokenPayload,
   ICreateDiplomasBatchPayload,
   ICreateDiplomasBatchResponse,
+  IDiplomaByQrTokenResponse,
   IDiploma,
   IDiplomaUserToken,
   IUserDiplomaTokenItem,
@@ -79,6 +80,13 @@ export const diplomaApi = baseApi.injectEndpoints({
       }),
     }),
 
+    getDiplomaByQrToken: build.query<IDiplomaByQrTokenResponse, string>({
+      query: (token) => ({
+        url: "/diplomas/qr-token",
+        params: { token },
+      }),
+    }),
+
     // ДЛЯ СТУДЕНТА
 
     getUserDiplomas: build.query<IUniversityDiploma[], number>({
@@ -130,6 +138,8 @@ export const {
   useUpdateDiplomaStatusMutation,
   useGetDiplomaByIdQuery,
   useLazyGetDiplomaByIdQuery,
+  useGetDiplomaByQrTokenQuery,
+  useLazyGetDiplomaByQrTokenQuery,
   useGetUserDiplomasQuery,
   useCreateDiplomaQrTokenMutation,
   useRevokeDiplomaQrTokenMutation,

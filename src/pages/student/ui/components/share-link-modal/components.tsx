@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   ThemeIcon,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { IconQrcode } from "@tabler/icons-react";
 import { Diploma } from "../../../model/type";
@@ -19,12 +20,15 @@ interface DiplomaInfoBlockProps {
 }
 
 export function DiplomaInfoBlock({ diploma }: DiplomaInfoBlockProps) {
+  const { colorScheme } = useMantineColorScheme();
+  const blockBg = colorScheme === "dark" ? "dark.6" : "gray.0";
+
   return (
     <Box>
       <Text size="sm" fw={600} mb={6}>
         Диплом
       </Text>
-      <Paper p="sm" radius="md" bg="gray.0" withBorder>
+      <Paper p="sm" radius="md" bg={blockBg} withBorder>
         <Text size="sm" fw={600} lineClamp={1}>
           {getDiplomaLabel(diploma)}
         </Text>
@@ -70,9 +74,12 @@ interface QrPreviewBlockProps {
 }
 
 export function QrPreviewBlock({ qrCodeDataUrl, onDownload }: QrPreviewBlockProps) {
+  const { colorScheme } = useMantineColorScheme();
+  const blockBg = colorScheme === "dark" ? "dark.6" : "gray.0";
+
   return (
     <>
-      <Paper h={140} radius="md" withBorder bg="gray.0">
+      <Paper h={140} radius="md" withBorder bg={blockBg}>
         <Stack h="100%" align="center" justify="center" gap={4}>
           {qrCodeDataUrl ? (
             <img src={qrCodeDataUrl} alt="QR code" style={{ width: 120, height: 120 }} />

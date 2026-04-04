@@ -20,7 +20,9 @@ export default function AuthPage() {
       px={{ base: 16, sm: 24, md: 48, lg: 80 }}
       py={{ base: 24, sm: 28, md: 40 }}
       style={{
-        minHeight: "100dvh",
+        height: "100%",
+        boxSizing: "border-box",
+        overflowY: "auto",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

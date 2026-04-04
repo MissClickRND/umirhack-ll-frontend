@@ -17,6 +17,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
 
 import { useNavigate } from "react-router-dom";
 
@@ -31,9 +32,13 @@ export default function StudentRegister() {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
+  const isCompactLaptop = useMediaQuery("(max-width: 90em)");
   const [register, { isLoading }] = useStudentRegisterMutation();
   const dispatch = useAppDispatch();
   const { showError, showSuccess } = useNotifications();
+  const inputSize = isCompactLaptop ? "sm" : "md";
+  const actionsSize = isCompactLaptop ? "sm" : "md";
+  const contentGap = isCompactLaptop ? "md" : "xl";
 
   const form = useForm<RegisterFormValues>({
     initialValues: {
@@ -70,13 +75,13 @@ export default function StudentRegister() {
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
       <Paper
-        p={{ base: 20, sm: 28, md: 40 }}
+        p={{ base: 16, sm: 22, md: 26, lg: 32 }}
         radius="lg"
         shadow="xl"
         withBorder
       >
         <LoadingOverlay visible={isLoading} />
-        <Stack gap="xl">
+        <Stack gap={contentGap}>
           <Center>
             <Title order={2}>Зарегистрироваться</Title>
           </Center>
@@ -84,7 +89,7 @@ export default function StudentRegister() {
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack gap="md">
               <TextInput
-                size="md"
+                size={inputSize}
                 label="Email"
                 placeholder="user@example.com"
                 radius={"sm"}
@@ -93,7 +98,7 @@ export default function StudentRegister() {
               />
 
               <PasswordInput
-                size="md"
+                size={inputSize}
                 label="Пароль"
                 placeholder="Минимум 4 символа"
                 radius={"sm"}
@@ -102,7 +107,7 @@ export default function StudentRegister() {
               />
 
               <PasswordInput
-                size="md"
+                size={inputSize}
                 label="Подтверждение пароля"
                 placeholder="Повторите пароль"
                 radius={"sm"}
@@ -110,7 +115,13 @@ export default function StudentRegister() {
                 {...form.getInputProps("confirmPassword")}
               />
 
-              <Button type="submit" fullWidth radius={"md"} mt="sm" size="md">
+              <Button
+                type="submit"
+                fullWidth
+                radius={"md"}
+                mt="sm"
+                size={actionsSize}
+              >
                 Создать аккаунт
               </Button>
             </Stack>
