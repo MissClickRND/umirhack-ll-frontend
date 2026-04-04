@@ -77,8 +77,8 @@ export const diplomaApi = baseApi.injectEndpoints({
         params: { number },
       }),
     }),
-    
-// ДЛЯ СТУДЕНТА
+
+    // ДЛЯ СТУДЕНТА
 
     getUserDiplomas: build.query<IUniversityDiploma[], number>({
       query: (userId) => `/diplomas/user/${userId}`,
@@ -88,7 +88,10 @@ export const diplomaApi = baseApi.injectEndpoints({
       ],
     }),
 
-    createDiplomaQrToken: build.mutation<IDiplomaUserToken, ICreateQrTokenPayload>({
+    createDiplomaQrToken: build.mutation<
+      IDiplomaUserToken,
+      ICreateQrTokenPayload
+    >({
       query: ({ id, type }) => ({
         url: `/diplomas/${id}/qr-token`,
         method: "POST",
@@ -117,8 +120,6 @@ export const diplomaApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Diploma", id: "USER_DIPLOMAS" }],
     }),
-
-    
   }),
 });
 
