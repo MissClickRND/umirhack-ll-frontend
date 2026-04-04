@@ -4,6 +4,7 @@ import {
   ICreateDiplomasBatchResponse,
   IDiploma,
   IUniversityDiploma,
+  IUniversityDiplomasResponse,
   IUpdateDiplomaStatusPayload,
 } from "../model/type";
 
@@ -33,9 +34,20 @@ export const diplomaApi = baseApi.injectEndpoints({
       },
     }),
 
-    getUniversityDiplomas: build.query<IUniversityDiploma[], number>({
-      query: (universityId) => `/diplomas/university/${universityId}`,
-      providesTags: (_result, _error, universityId) => [
+    getUniversityDiplomas: build.query<
+      IUniversityDiplomasResponse,
+      { universityId: number; page?: number; limit?: number; search?: string }
+    >({
+      query: ({ universityId, page = 1, limit = 10, search }) => ({
+        url: "/diplomas/university",
+        params: {
+          universityId,
+          page,
+          limit,
+          search: search?.trim() || undefined,
+        },
+      }),
+      providesTags: (_result, _error, { universityId }) => [
         { type: "Diploma", id: "UNIVERSITY_LIST" },
         { type: "Diploma", id: `UNIVERSITY_${universityId}` },
       ],
@@ -57,13 +69,11 @@ export const diplomaApi = baseApi.injectEndpoints({
     }),
 
     getDiplomaById: build.query<IDiploma, string>({
-        query: (number) => ({
-            url: "/diplomas/search",
-            params: { number },
-        }),
+      query: (number) => ({
+        url: "/diplomas/search",
+        params: { number },
+      }),
     }),
-
-    
   }),
 });
 

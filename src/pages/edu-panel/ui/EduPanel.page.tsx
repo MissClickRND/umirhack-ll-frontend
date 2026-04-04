@@ -1,4 +1,11 @@
-import { useMemo, useState, type ChangeEvent, type DragEvent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type ChangeEvent,
+  type DragEvent,
+} from "react";
+import { useDebouncedValue } from "@mantine/hooks";
 import {
   Alert,
   Badge,
@@ -6,11 +13,13 @@ import {
   Button,
   Group,
   Loader,
+  Pagination,
   Paper,
   Select,
   Stack,
   Table,
   Text,
+  TextInput,
   Title,
   useMantineColorScheme,
   useMantineTheme,
@@ -18,6 +27,7 @@ import {
 import {
   IconAlertCircle,
   IconFileSpreadsheet,
+  IconSearch,
   IconUpload,
 } from "@tabler/icons-react";
 import {
@@ -52,6 +62,8 @@ const degreeStatusDiploma = {
   VALID: "Действителен",
   REVOKED: "Отозван",
 };
+
+const DIPLOMAS_PER_PAGE = 10;
 
 const csvEncodings = ["utf-8", "windows-1251", "koi8-r"] as const;
 
@@ -223,6 +235,12 @@ export default function EduPanelPage() {
   const [parseErrors, setParseErrors] = useState<string[]>([]);
   const [fileName, setFileName] = useState<string>("");
   const [isDragOver, setIsDragOver] = useState(false);
+  const [diplomaPage, setDiplomaPage] = useState(1);
+  const [diplomaSearchValue, setDiplomaSearchValue] = useState("");
+  const [debouncedDiplomaSearch] = useDebouncedValue(
+    diplomaSearchValue.trim(),
+    450,
+  );
   const [degreeLevel, setDegreeLevel] =
     useState<keyof typeof DegreeLevel>("BACHELOR");
 
@@ -231,18 +249,52 @@ export default function EduPanelPage() {
   const [updateStatus, { isLoading: isRevoking }] =
     useUpdateDiplomaStatusMutation();
 
-  const universityId = user.universityId ?? null;
+  const resolvedUniversityId = user.universityId ?? user.university_id ?? null;
+  const universityId =
+    typeof resolvedUniversityId === "number"
+      ? resolvedUniversityId
+      : Number(resolvedUniversityId);
+  const hasUniversityId = Number.isInteger(universityId) && universityId > 0;
 
   const {
     data: universityDiplomas,
     isLoading: isLoadingDiplomas,
     isFetching: isFetchingDiplomas,
-  } = useGetUniversityDiplomasQuery(universityId ?? 0, {
-    skip: universityId === null,
-  });
+  } = useGetUniversityDiplomasQuery(
+    {
+      universityId: hasUniversityId ? universityId : 0,
+      page: diplomaPage,
+      limit: DIPLOMAS_PER_PAGE,
+      search: debouncedDiplomaSearch || undefined,
+    },
+    {
+      skip: !hasUniversityId,
+      refetchOnMountOrArgChange: true,
+    },
+  );
+
+  const diplomas = universityDiplomas?.data ?? [];
+  const diplomaTotalPages = Math.max(
+    1,
+    universityDiplomas?.meta?.totalPages ?? 1,
+  );
+
+  useEffect(() => {
+    setDiplomaPage(1);
+  }, [universityId]);
+
+  useEffect(() => {
+    setDiplomaPage(1);
+  }, [debouncedDiplomaSearch]);
+
+  useEffect(() => {
+    if (diplomaPage > diplomaTotalPages) {
+      setDiplomaPage(diplomaTotalPages);
+    }
+  }, [diplomaPage, diplomaTotalPages]);
 
   const payload = useMemo<{ diplomas: ICreateDiplomaItem[] }>(() => {
-    if (!universityId) {
+    if (!hasUniversityId) {
       return { diplomas: [] };
     }
 
@@ -256,7 +308,7 @@ export default function EduPanelPage() {
         degreeLevel,
       })),
     };
-  }, [degreeLevel, rows, universityId]);
+  }, [degreeLevel, hasUniversityId, rows, universityId]);
 
   const parseFile = async (file: File) => {
     try {
@@ -324,7 +376,7 @@ export default function EduPanelPage() {
   };
 
   const onCreateDiplomas = async () => {
-    if (!universityId) {
+    if (!hasUniversityId) {
       showError("У аккаунта не найден universityId. Перелогиньтесь.");
       return;
     }
@@ -346,7 +398,7 @@ export default function EduPanelPage() {
   };
 
   const onRevoke = async (id: number) => {
-    if (!universityId) {
+    if (!hasUniversityId) {
       showError("У аккаунта не найден universityId");
       return;
     }
@@ -478,7 +530,7 @@ export default function EduPanelPage() {
               </Alert>
             ) : null}
 
-            {!universityId ? (
+            {!hasUniversityId ? (
               <Alert
                 icon={<IconAlertCircle size={16} />}
                 color="yellow"
@@ -520,7 +572,7 @@ export default function EduPanelPage() {
               <Button
                 onClick={onCreateDiplomas}
                 loading={isCreating}
-                disabled={payload.diplomas.length === 0 || !universityId}
+                disabled={payload.diplomas.length === 0 || !hasUniversityId}
               >
                 Создать
               </Button>
@@ -542,19 +594,27 @@ export default function EduPanelPage() {
               ) : null}
             </Group>
 
-            {!universityId ? (
+            <TextInput
+              placeholder="Поиск: ФИО, номер, специальность, статус"
+              value={diplomaSearchValue}
+              onChange={(event) =>
+                setDiplomaSearchValue(event.currentTarget.value)
+              }
+              leftSection={<IconSearch size={16} />}
+              maw={460}
+            />
+
+            {!hasUniversityId ? (
               <Text c="dimmed">
                 Нет universityId для загрузки списка дипломов.
               </Text>
             ) : null}
 
-            {universityId &&
-            !isLoadingDiplomas &&
-            (universityDiplomas?.length ?? 0) === 0 ? (
+            {hasUniversityId && !isLoadingDiplomas && diplomas.length === 0 ? (
               <Text c="dimmed">Пока нет созданных дипломов.</Text>
             ) : null}
 
-            {universityId && (universityDiplomas?.length ?? 0) > 0 ? (
+            {hasUniversityId && diplomas.length > 0 ? (
               <Table.ScrollContainer minWidth={980}>
                 <Table withRowBorders>
                   <Table.Thead>
@@ -568,7 +628,7 @@ export default function EduPanelPage() {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
-                    {universityDiplomas?.map((diploma) => {
+                    {diplomas.map((diploma) => {
                       const year = new Date(diploma.issuedAt).getFullYear();
                       const isRevoked = diploma.status === "REVOKED";
 
@@ -608,6 +668,17 @@ export default function EduPanelPage() {
                   </Table.Tbody>
                 </Table>
               </Table.ScrollContainer>
+            ) : null}
+
+            {hasUniversityId && diplomaTotalPages > 1 ? (
+              <Group justify="center">
+                <Pagination
+                  value={diplomaPage}
+                  onChange={setDiplomaPage}
+                  total={diplomaTotalPages}
+                  withEdges
+                />
+              </Group>
             ) : null}
           </Stack>
         </Paper>

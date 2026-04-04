@@ -5,7 +5,7 @@ export const DegreeLevel = {
   DOCTORATE: "Докторантура",
 } as const;
 
-type DegreeLevel = (typeof DegreeLevel)[keyof typeof DegreeLevel];
+export type DegreeLevel = keyof typeof DegreeLevel;
 
 export type DiplomaStatus = "ISSUED" | "VALID" | "REVOKED";
 
@@ -46,6 +46,19 @@ export interface IUniversityDiploma {
   createdAt: string;
   updatedAt: string;
   university: IUniversityInfo;
+}
+
+export interface IDiplomaPaginationMeta {
+  page: number;
+  limit: number;
+  itemsOnPage: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface IUniversityDiplomasResponse {
+  data: IUniversityDiploma[];
+  meta: IDiplomaPaginationMeta;
 }
 
 export interface IUpdateDiplomaStatusPayload {

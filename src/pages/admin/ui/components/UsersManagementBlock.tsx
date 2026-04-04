@@ -5,15 +5,17 @@ import {
   Group,
   Loader,
   NativeSelect,
+  Pagination,
   Paper,
   Stack,
   Table,
+  TextInput,
   Text,
   Title,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useMediaQuery } from "@mantine/hooks";
-import { IconRefresh } from "@tabler/icons-react";
+import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
+import { IconRefresh, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import {
   IUserPublic,
@@ -21,6 +23,8 @@ import {
   useGetUsersQuery,
   useUpdateRoleUserMutation,
 } from "@/entities/user";
+import { selectUser } from "@/entities/user/model/userSelectors";
+import { useAppSelector } from "@/shared/lib";
 
 type RoleCode = "ADMIN" | "HR" | "NEED_VERIFICATION" | "STUDENT" | "UNIVERSITY";
 
@@ -47,6 +51,8 @@ const roleLabel: Record<RoleCode, string> = {
   STUDENT: "Студент",
   UNIVERSITY: "ВУЗ",
 };
+
+const USERS_PER_PAGE = 10;
 
 function parseRoleCode(role: string): RoleCode | null {
   if (role in roleLabel) {
@@ -83,17 +89,39 @@ function formatDate(value: string) {
 
 export default function UsersManagementBlock() {
   const isMobile = useMediaQuery("(max-width: 64em)");
+  const [page, setPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearch] = useDebouncedValue(searchValue.trim(), 450);
+
+  const userSlice = useAppSelector(selectUser);
   const {
-    data: users = [],
+    data: usersResponse,
     isLoading,
     isFetching,
     refetch,
-  } = useGetUsersQuery();
+  } = useGetUsersQuery({
+    page,
+    limit: USERS_PER_PAGE,
+    search: debouncedSearch || undefined,
+  });
+
+  const users = usersResponse?.data ?? [];
+  const totalPages = Math.max(1, usersResponse?.meta?.totalPages ?? 1);
 
   const [updateRoleUser, { isLoading: isRoleMutating }] =
     useUpdateRoleUserMutation();
   const [processingRoleId, setProcessingRoleId] = useState<number | null>(null);
   const [roleDrafts, setRoleDrafts] = useState<Record<number, UserRole>>({});
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     setRoleDrafts((prev) => {
@@ -144,15 +172,25 @@ export default function UsersManagementBlock() {
           Все пользователи
         </Title>
 
-        <Button
-          variant="light"
-          leftSection={<IconRefresh size={16} />}
-          onClick={() => refetch()}
-          loading={isFetching || isRoleMutating}
-          radius="md"
-        >
-          Обновить
-        </Button>
+        <Group gap="sm" wrap="wrap">
+          <TextInput
+            placeholder="Поиск: email, роль, id, вуз"
+            value={searchValue}
+            onChange={(event) => setSearchValue(event.currentTarget.value)}
+            leftSection={<IconSearch size={16} />}
+            w={{ base: "100%", sm: 320 }}
+          />
+
+          <Button
+            variant="light"
+            leftSection={<IconRefresh size={16} />}
+            onClick={() => refetch()}
+            loading={isFetching || isRoleMutating}
+            radius="md"
+          >
+            Обновить
+          </Button>
+        </Group>
       </Group>
 
       {isLoading ? (
@@ -163,7 +201,7 @@ export default function UsersManagementBlock() {
         <Text c="dimmed">Список пользователей пуст.</Text>
       ) : isMobile ? (
         <Stack gap={12}>
-          {users.map((user) => {
+          {users?.map((user) => {
             const selectedRole = roleDrafts[user.id] ?? user.role;
 
             return (
@@ -174,6 +212,13 @@ export default function UsersManagementBlock() {
                       Email
                     </Text>
                     <Text fw={600}>{user.email}</Text>
+                  </Box>
+
+                  <Box>
+                    <Text size="xs" c="dimmed">
+                      ВУЗ (кратко)
+                    </Text>
+                    <Text fw={500}>{user.universityShortName ?? "-"}</Text>
                   </Box>
 
                   <Group justify="space-between" align="center">
@@ -226,6 +271,7 @@ export default function UsersManagementBlock() {
             <Table.Thead>
               <Table.Tr c="dimmed">
                 <Table.Th>Email</Table.Th>
+                <Table.Th>ВУЗ (кратко)</Table.Th>
                 <Table.Th>Текущая роль</Table.Th>
                 <Table.Th>Новая роль</Table.Th>
                 <Table.Th>Дата регистрации</Table.Th>
@@ -233,12 +279,13 @@ export default function UsersManagementBlock() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {users.map((user) => {
+              {users?.map((user) => {
                 const selectedRole = roleDrafts[user.id] ?? user.role;
 
                 return (
                   <Table.Tr key={user.id}>
                     <Table.Td fw={600}>{user.email}</Table.Td>
+                    <Table.Td>{user.universityShortName ?? "-"}</Table.Td>
                     <Table.Td>
                       <Badge
                         variant="light"
@@ -249,6 +296,7 @@ export default function UsersManagementBlock() {
                     </Table.Td>
                     <Table.Td miw={220}>
                       <NativeSelect
+                        disabled={user.id === userSlice.id}
                         value={selectedRole}
                         onChange={(event) => {
                           const nextValue = event.currentTarget
@@ -280,6 +328,17 @@ export default function UsersManagementBlock() {
           </Table>
         </Table.ScrollContainer>
       )}
+
+      {totalPages > 1 ? (
+        <Group justify="center" mt="md">
+          <Pagination
+            value={page}
+            onChange={setPage}
+            total={totalPages}
+            withEdges
+          />
+        </Group>
+      ) : null}
     </Paper>
   );
 }

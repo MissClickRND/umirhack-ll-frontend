@@ -21,6 +21,20 @@ export interface IUserPublic {
   email: string;
   role: UserRole;
   createdAt: string;
+  universityShortName?: string | null;
+}
+
+export interface IPaginationMeta {
+  page: number;
+  limit: number;
+  itemsOnPage: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface IUsersListResponse {
+  data: IUserPublic[];
+  meta: IPaginationMeta;
 }
 
 export interface IUniversityShort {

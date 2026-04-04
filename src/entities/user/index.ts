@@ -8,9 +8,11 @@ export {
 } from "./api/userApi";
 export type {
   IAttachedDiplomaResponse,
+  IPaginationMeta,
   IRoleChangeResponse,
   IUpdateRolePayload,
   IUserPublic,
+  IUsersListResponse,
   IUserState,
   IVerificationUser,
   IVerifyRequestPayload,
