@@ -1,33 +1,56 @@
 import {
   Stack,
   useMantineTheme,
-  Center,
+  Box,
   useMantineColorScheme,
 } from "@mantine/core";
-import SearchDiploma from "./components/SearchDiploma";
-import Result from "./components/Result";
+import { useState } from "react";
 import { useAppSelector } from "@/shared/lib";
 import { selectUser } from "@/entities/user/model/userSelectors";
+import { IDiploma } from "@/entities/diplomas";
+import SearchDiploma from "./components/SearchDiploma";
+import Result from "./components/Result";
 import Notification from "./components/Notification";
 
 export default function Main() {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
-  const state = useAppSelector((state) => state.check);
   const user = useAppSelector(selectUser);
+  const [searchResult, setSearchResult] = useState<IDiploma | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const handleResult = (diploma: IDiploma | null) => {
+    setHasSearched(true);
+    setSearchResult(diploma);
+  };
 
   return (
-    <Center
+    <Box
       bg={isDark ? theme.other.backgroundDark : theme.other.background}
       h="100%"
-      p={{ base: "md", sm: "xl" }}
+      px={{ base: "md", sm: "xl" }}
+      py="xl"
+      style={{ overflowY: "auto" }}
     >
-      <Stack align="center" maw={650} w="100%">
+      <Stack align="stretch" maw={650} w="100%" mx="auto">
         {user?.role === "NEED_VERIFICATION" && <Notification />}
-        <SearchDiploma />
-        {state.isChecked && <Result />}
+        <SearchDiploma onResult={handleResult} />
+        {hasSearched && (
+          <Result
+            status={Boolean(searchResult)}
+            studentName={searchResult?.fullNameAuthor ?? ""}
+            specialty={searchResult?.specialty ?? ""}
+            institution={searchResult?.university?.name ?? ""}
+            graduationYear={
+              searchResult?.issuedAt
+                ? String(new Date(searchResult.issuedAt).getFullYear())
+                : ""
+            }
+            degree={searchResult?.degreeLevel ?? ""}
+          />
+        )}
       </Stack>
-    </Center>
+    </Box>
   );
 }
