@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthPage, Login, Register } from "@/pages/auth";
 import MainLayout from "../layouts/MainLayout";
 import Choose from "@/pages/auth/ui/components/Choose";
+import { Student } from "@/pages/student";
 
 
 const router = createBrowserRouter([
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Main />,
       },
+      {
+        path: '/student',
+        element: <Student />
+      }
     ],
   },
 
