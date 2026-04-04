@@ -73,3 +73,28 @@ export interface IUniversityShort {
     createdAt: string,
     updatedAt: string
 }
+
+export type QrTokenType = "ONETIME" | "DAYS_7" | "DAYS_30" | "INFINITE";
+
+export interface ICreateQrTokenPayload {
+  id: number;
+  type: QrTokenType;
+}
+
+export interface IDiplomaUserToken {
+  id: number;
+  diplomaId: number;
+  token: string;
+  type: QrTokenType;
+  isRevoked: boolean;
+  expiresAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IAttachMyDiplomaResponse {
+  id: number;
+  userId: number;
+  universityId: number;
+  status: DiplomaStatus;
+}
