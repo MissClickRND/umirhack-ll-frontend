@@ -2,6 +2,8 @@ export {
   useCreateDiplomaBatchMutation,
   useGetUniversityDiplomasQuery,
   useUpdateDiplomaStatusMutation,
+  useGetDiplomaByIdQuery,
+  useLazyGetDiplomaByIdQuery,
 } from "./api/diplomaApi";
 
 export type {
@@ -12,4 +14,6 @@ export type {
   ICreateDiplomasBatchResponse,
   IUniversityDiploma,
   IUpdateDiplomaStatusPayload,
+  IDiploma,
+  IUniversityShort
 } from "./model/type";

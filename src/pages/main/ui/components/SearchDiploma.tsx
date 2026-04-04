@@ -15,7 +15,7 @@ import {
   IconAlertCircle,
   IconArrowRight,
 } from "@tabler/icons-react";
-import { IDiploma, useLazyGetDiplomaByIdQuery } from "@/entities/diplomas";
+import { IDiploma, useLazyGetDiplomaByIdQuery } from "@/entities/diploma";
 
 interface SearchDiplomaProps {
   onResult: (diploma: IDiploma | null) => void;

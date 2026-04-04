@@ -7,7 +7,7 @@ import {
 import { useState } from "react";
 import { useAppSelector } from "@/shared/lib";
 import { selectUser } from "@/entities/user/model/userSelectors";
-import { IDiploma } from "@/entities/diplomas";
+import { IDiploma } from "@/entities/diploma";
 import SearchDiploma from "./components/SearchDiploma";
 import Result from "./components/Result";
 import Notification from "./components/Notification";

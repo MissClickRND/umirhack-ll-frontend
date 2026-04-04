@@ -2,6 +2,7 @@ import { baseApi } from "@/shared/api";
 import {
   ICreateDiplomasBatchPayload,
   ICreateDiplomasBatchResponse,
+  IDiploma,
   IUniversityDiploma,
   IUpdateDiplomaStatusPayload,
 } from "../model/type";
@@ -54,6 +55,13 @@ export const diplomaApi = baseApi.injectEndpoints({
         { type: "Diploma", id: `UNIVERSITY_${payload.universityId}` },
       ],
     }),
+
+    getDiplomaById: build.query<IDiploma, string>({
+        query: (number) => ({
+            url: "/diplomas/search",
+            params: { number },
+        }),
+    }),
   }),
 });
 
@@ -61,4 +69,6 @@ export const {
   useCreateDiplomaBatchMutation,
   useGetUniversityDiplomasQuery,
   useUpdateDiplomaStatusMutation,
+  useGetDiplomaByIdQuery,
+  useLazyGetDiplomaByIdQuery,
 } = diplomaApi;

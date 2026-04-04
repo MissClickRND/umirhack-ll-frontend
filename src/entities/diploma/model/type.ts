@@ -50,3 +50,26 @@ export interface IUpdateDiplomaStatusPayload {
   universityId: number;
   status: DiplomaStatus;
 }
+
+export interface IDiploma {
+    id: number;
+    fullNameAuthor: string;
+    registrationNumber: string;
+    userId: number;
+    universityId: number;
+    issuedAt: string;
+    specialty: string;
+    degreeLevel: string;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    university: IUniversityShort;
+}
+
+export interface IUniversityShort {
+    id: number,
+    name: string,
+    shortName: string,
+    createdAt: string,
+    updatedAt: string
+}
