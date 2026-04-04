@@ -19,7 +19,7 @@ export default function Header() {
         position: "sticky",
         top: 0,
         zIndex: 100,
-        borderBottom: `1px solid var(--mantine-color-outline)`,
+        borderBottom: `1px solid var(--mantine-color-gray-2)`,
       }}
     >
       <Container size="xl">

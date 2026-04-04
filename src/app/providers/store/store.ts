@@ -2,10 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { listenerMiddleware, registerListeners } from "./listenersMiddleware";
 import { userReducer } from "@/entities/user";
 import { baseApi } from "@/shared/api";
+import { checkReducer } from "@/pages/main/model/store";
 
 export const store = configureStore({
   //? Подключение слайсов
   reducer: {
+    check: checkReducer,
     user: userReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },

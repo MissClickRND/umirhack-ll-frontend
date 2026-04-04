@@ -1,13 +1,18 @@
-import { Box, Text } from "@mantine/core";
-import { IconHome } from "@tabler/icons-react";
+import { Stack, useMantineTheme, Center } from "@mantine/core";
+import SearchDiploma from "./components/SearchDiploma";
+import Result from "./components/Result";
+import { useAppSelector } from "@/shared/lib";
 
 export default function Main() {
-  return (
-    <Box w="100vw" bg="blue">
-      <Text py={50} ta="center" fz={28} c="white">
-        <IconHome />
-        Главная страница сайта с ci/cd
-      </Text>
-    </Box>
-  );
+    const theme = useMantineTheme();
+    const state = useAppSelector((state) => state.check);
+  
+    return (
+      <Center bg={theme.other.background} h="100%" p={'xl'}>
+        <Stack align="center" maw={650}>
+          <SearchDiploma/>
+          {state.isChecked && <Result/>}
+        </Stack>
+      </Center>
+    );
 }
