@@ -1,5 +1,6 @@
 export {
-  useRegisterMutation,
+  useUniversityRegisterMutation,
+  useStudentRegisterMutation,
   useLoginMutation,
   useLogoutMutation,
   useStatusQuery,

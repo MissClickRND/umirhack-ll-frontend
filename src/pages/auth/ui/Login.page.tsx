@@ -40,7 +40,7 @@ export default function Login() {
   const handleSubmit = async () => {
     try {
       const data = await login(form.values).unwrap();
-      dispatch(setUser(data));
+      dispatch(setUser(data.user));
       showSuccess("Вы вошли в аккаунт");
       navigate("/");
       form.reset();
@@ -55,9 +55,7 @@ export default function Login() {
         <LoadingOverlay visible={isLoading} />
         <Stack gap="xl">
           <Center>
-            <Title order={2}>
-              Вход в систему
-            </Title>
+            <Title order={2}>Вход в систему</Title>
           </Center>
 
           <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -66,8 +64,8 @@ export default function Login() {
                 size="md"
                 label="Email"
                 placeholder="user@example.com"
-                styles={{label: {marginBottom: 6}}}
-                radius={'sm'}
+                styles={{ label: { marginBottom: 6 } }}
+                radius={"sm"}
                 {...form.getInputProps("email")}
               />
 
@@ -75,18 +73,12 @@ export default function Login() {
                 size="md"
                 label="Пароль"
                 placeholder="Минимум 4 символа"
-                radius={'sm'}
-                styles={{label: {marginBottom: 6}}}
+                radius={"sm"}
+                styles={{ label: { marginBottom: 6 } }}
                 {...form.getInputProps("password")}
               />
 
-              <Button
-                type="submit"
-                fullWidth
-                radius={'md'}
-                mt="sm"
-                size="md"
-              >
+              <Button type="submit" fullWidth radius={"md"} mt="sm" size="md">
                 Войти
               </Button>
             </Stack>

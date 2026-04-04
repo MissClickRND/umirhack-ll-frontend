@@ -1,11 +1,22 @@
 import { UserRole } from "@/entities/user/model/type";
 
-export interface IRegisterRequest {
+export interface IRegisterUniversityRequest {
+  accountType: "university";
+  email: string;
+  password: string;
+  name: string;
+  short_name: string;
+}
+export interface IRegisterStudentRequest {
+  accountType: "student";
   email: string;
   password: string;
 }
 
-export interface ILoginRequest extends IRegisterRequest {}
+export interface ILoginRequest {
+  email: string;
+  password: string;
+}
 
 interface UserStatus {
   id: number;

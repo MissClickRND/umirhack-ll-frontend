@@ -1,25 +1,47 @@
 import { baseApi } from "@/shared/api";
 import {
   ILoginRequest,
-  IRegisterRequest,
+  IRegisterStudentRequest,
+  IRegisterUniversityRequest,
   IStatusResponse,
 } from "../model/type";
 import { IUserState } from "@/entities/user";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    register: build.mutation<IUserState, IRegisterRequest>({
+    universityRegister: build.mutation<
+      { user: IUserState },
+      IRegisterUniversityRequest
+    >({
       query: (data) => ({
         url: "/auth/register",
         method: "POST",
         body: {
+          accountType: data.accountType,
+          email: data.email,
+          password: data.password,
+          name: data.name,
+          short_name: data.short_name,
+        },
+      }),
+    }),
+
+    studentRegister: build.mutation<
+      { user: IUserState },
+      IRegisterStudentRequest
+    >({
+      query: (data) => ({
+        url: "/auth/register",
+        method: "POST",
+        body: {
+          accountType: data.accountType,
           email: data.email,
           password: data.password,
         },
       }),
     }),
 
-    login: build.mutation<IUserState, ILoginRequest>({
+    login: build.mutation<{ user: IUserState }, ILoginRequest>({
       query: (data) => ({
         url: "/auth/login",
         method: "POST",
@@ -42,7 +64,8 @@ export const authApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useRegisterMutation,
+  useUniversityRegisterMutation,
+  useStudentRegisterMutation,
   useLoginMutation,
   useLogoutMutation,
   useStatusQuery,

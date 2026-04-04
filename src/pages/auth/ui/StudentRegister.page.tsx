@@ -1,4 +1,4 @@
-import { useRegisterMutation } from "@/entities/auth";
+import { useStudentRegisterMutation } from "@/entities/auth";
 import { setUser } from "@/entities/user/model/userSlice";
 import { useAppDispatch, useNotifications } from "@/shared/lib";
 import {
@@ -24,9 +24,9 @@ interface RegisterFormValues {
   confirmPassword: string;
 }
 
-export default function Register() {
+export default function StudentRegister() {
   const navigate = useNavigate();
-  const [register, { isLoading }] = useRegisterMutation();
+  const [register, { isLoading }] = useStudentRegisterMutation();
   const dispatch = useAppDispatch();
   const { showError, showSuccess } = useNotifications();
 
@@ -48,8 +48,12 @@ export default function Register() {
 
   const handleSubmit = async () => {
     try {
-      const data = await register(form.values).unwrap();
-      dispatch(setUser(data));
+      const data = await register({
+        accountType: "student",
+        email: form.values.email,
+        password: form.values.password,
+      }).unwrap();
+      dispatch(setUser(data.user));
       showSuccess("Вы зарегистрировались в аккаунт");
       navigate("/");
       form.reset();
@@ -64,9 +68,7 @@ export default function Register() {
         <LoadingOverlay visible={isLoading} />
         <Stack gap="xl">
           <Center>
-            <Title order={2}>
-              Зарегистрироваться
-            </Title>
+            <Title order={2}>Зарегистрироваться</Title>
           </Center>
 
           <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -75,8 +77,8 @@ export default function Register() {
                 size="md"
                 label="Email"
                 placeholder="user@example.com"
-                radius={'sm'}
-                styles={{label: {marginBottom: 6}}}
+                radius={"sm"}
+                styles={{ label: { marginBottom: 6 } }}
                 {...form.getInputProps("email")}
               />
 
@@ -84,8 +86,8 @@ export default function Register() {
                 size="md"
                 label="Пароль"
                 placeholder="Минимум 4 символа"
-                radius={'sm'}
-                styles={{label: {marginBottom: 6}}}
+                radius={"sm"}
+                styles={{ label: { marginBottom: 6 } }}
                 {...form.getInputProps("password")}
               />
 
@@ -93,18 +95,12 @@ export default function Register() {
                 size="md"
                 label="Подтверждение пароля"
                 placeholder="Повторите пароль"
-                radius={'sm'}
-                styles={{label: {marginBottom: 6}}}
+                radius={"sm"}
+                styles={{ label: { marginBottom: 6 } }}
                 {...form.getInputProps("confirmPassword")}
               />
 
-              <Button
-                type="submit"
-                fullWidth
-                radius={'md'}
-                mt="sm"
-                size="md"
-              >
+              <Button type="submit" fullWidth radius={"md"} mt="sm" size="md">
                 Создать аккаунт
               </Button>
             </Stack>
