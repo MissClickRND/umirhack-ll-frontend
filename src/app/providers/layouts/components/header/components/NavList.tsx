@@ -5,10 +5,8 @@ import { useNavigate } from "react-router-dom";
 export default function NavList() {
     const navigate = useNavigate();
     const links = [
-        { label: "Проверка", path: "/verification" },
-        { label: "История", path: "/history" },
+        { label: "Проверка", path: "/" },
         { label: "Интеграция API", path: "/api" },
-        { label: "Помощь", path: "/help" },
   ];
 
     return (
