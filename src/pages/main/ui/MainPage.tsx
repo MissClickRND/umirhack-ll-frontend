@@ -1,13 +1,13 @@
 import {
   Stack,
   useMantineTheme,
-  Center,
+  Box,
   useMantineColorScheme,
 } from "@mantine/core";
 import { useState } from "react";
 import { useAppSelector } from "@/shared/lib";
 import { selectUser } from "@/entities/user/model/userSelectors";
-import { IDiploma } from "@/entities/diplomas/model/type";
+import { IDiploma } from "@/entities/diplomas";
 import SearchDiploma from "./components/SearchDiploma";
 import Result from "./components/Result";
 import Notification from "./components/Notification";
@@ -26,12 +26,14 @@ export default function Main() {
   };
 
   return (
-    <Center
+    <Box
       bg={isDark ? theme.other.backgroundDark : theme.other.background}
       h="100%"
-      p={{ base: "md", sm: "xl" }}
+      px={{ base: "md", sm: "xl" }}
+      py="xl"
+      style={{ overflowY: "auto" }}
     >
-      <Stack align="center" maw={650} w="100%">
+      <Stack align="stretch" maw={650} w="100%" mx="auto">
         {user?.role === "NEED_VERIFICATION" && <Notification />}
         <SearchDiploma onResult={handleResult} />
         {hasSearched && (
@@ -49,6 +51,6 @@ export default function Main() {
           />
         )}
       </Stack>
-    </Center>
+    </Box>
   );
 }

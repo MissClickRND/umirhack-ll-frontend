@@ -1,4 +1,4 @@
-enum UserRole {
+export enum UserRole {
   HR = "HR",
   STUDENT = "Студент",
   ADMIN = "Админ",
