@@ -38,7 +38,10 @@ type ParsedRow = {
   registrationNumber: string;
 };
 
-const degreeLevelOptions: Array<{ value: DegreeLevel; label: string }> = [
+const degreeLevelOptions: Array<{
+  value: keyof typeof DegreeLevel;
+  label: string;
+}> = [
   { value: "BACHELOR", label: "Бакалавр" },
   { value: "MAGISTRACY", label: "Магистратура" },
   { value: "SPECIALIST", label: "Специалитет" },
@@ -220,7 +223,8 @@ export default function EduPanelPage() {
   const [parseErrors, setParseErrors] = useState<string[]>([]);
   const [fileName, setFileName] = useState<string>("");
   const [isDragOver, setIsDragOver] = useState(false);
-  const [degreeLevel, setDegreeLevel] = useState<DegreeLevel>("BACHELOR");
+  const [degreeLevel, setDegreeLevel] =
+    useState<keyof typeof DegreeLevel>("BACHELOR");
 
   const [createBatch, { isLoading: isCreating }] =
     useCreateDiplomaBatchMutation();
@@ -390,7 +394,7 @@ export default function EduPanelPage() {
                   if (!value) {
                     return;
                   }
-                  setDegreeLevel(value as DegreeLevel);
+                  setDegreeLevel(value as keyof typeof DegreeLevel);
                 }}
                 data={degreeLevelOptions}
                 w={220}

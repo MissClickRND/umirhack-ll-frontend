@@ -3,8 +3,10 @@ import {
   Stack,
   Title,
   Text,
+  Image,
   useMantineColorScheme,
   useMantineTheme,
+  Group,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconShieldLock, IconDatabase, IconBolt } from "@tabler/icons-react";
@@ -19,7 +21,7 @@ export default function Description() {
 
   const sectionGap = isMobile ? 24 : isTablet ? 32 : 40;
   const featuresGap = isMobile ? 16 : 24;
-  const titleSize = isMobile ? "2rem" : isTablet ? "2.5rem" : "3rem";
+  const titleSize = isMobile ? "1.9rem" : isTablet ? "2.5rem" : "2.6rem";
 
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
@@ -36,19 +38,24 @@ export default function Description() {
                 >
                     Безопасный доступ
                 </Badge> */}
-
-        <Title order={1} lh={1.2} style={{ fontSize: titleSize }}>
-          Добро пожаловать в <br />
-          <span
-            style={{
-              color: isDark
-                ? "var(--mantine-color-primaryDark-5)"
-                : "var(--mantine-color-primary-5)",
-            }}
+        <Group style={{ flexWrap: "nowrap" }}>
+          <Image src="/icons/logo.svg" alt="TrustEDU" w={100} />
+          <Title
+            order={1}
+            lh={{ base: 1, sm: 1.2 }}
+            style={{ fontSize: titleSize }}
           >
-            TrustEDU
-          </span>
-        </Title>
+            Добро пожаловать в <br />
+            <Text
+              span
+              fz={{ base: 40, sm: 50 }}
+              fw={600}
+              c={theme.primaryColor}
+            >
+              TrustEDU
+            </Text>
+          </Title>
+        </Group>
 
         <Text
           size={isMobile ? "md" : "lg"}

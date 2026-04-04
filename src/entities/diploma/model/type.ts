@@ -62,8 +62,8 @@ export interface IDiploma {
   universityId: number;
   issuedAt: string;
   specialty: string;
-  degreeLevel: string;
-  status: string;
+  degreeLevel: DegreeLevel;
+  status: DiplomaStatus;
   createdAt: string;
   updatedAt: string;
   university: IUniversityShort;

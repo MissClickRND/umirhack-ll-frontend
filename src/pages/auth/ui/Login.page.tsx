@@ -103,7 +103,7 @@ export default function Login() {
           >
             Нет аккаунта?{" "}
             <Anchor
-              c={isDark ? "primaryDark.4" : "primary.6"}
+              c={"primary"}
               fw={500}
               onClick={() => navigate("/auth/register")}
               style={{ cursor: "pointer" }}
