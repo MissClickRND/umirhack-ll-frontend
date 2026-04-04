@@ -73,12 +73,15 @@ export const diplomaApi = baseApi.injectEndpoints({
       ],
     }),
 
-    getDiplomaById: build.query<IDiploma, string>({
-      query: (number) => ({
-        url: "/diplomas/search",
-        params: { number },
-      }),
-    }),
+    getDiplomaById: build.query<IDiploma, { number: string; fullName: string }>(
+      {
+        query: ({ number, fullName }) => ({
+          url: "/diplomas/search",
+          params: { number, fullName },
+          credentials: "omit",
+        }),
+      },
+    ),
 
     getDiplomaByQrToken: build.query<IDiplomaByQrTokenResponse, string>({
       query: (token) => ({

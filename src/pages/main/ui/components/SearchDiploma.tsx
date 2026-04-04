@@ -14,6 +14,7 @@ import {
   IconSearch,
   IconAlertCircle,
   IconArrowRight,
+  IconUser,
 } from "@tabler/icons-react";
 import { IDiploma, useLazyGetDiplomaByIdQuery } from "@/entities/diploma";
 
@@ -22,7 +23,8 @@ interface SearchDiplomaProps {
 }
 
 export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
-  const [query, setQuery] = useState("");
+  const [numberValue, setNumberValue] = useState("");
+  const [fullName, setFullName] = useState("");
   const [triggerSearch, { isFetching }] = useLazyGetDiplomaByIdQuery();
 
   const formatDiplomaNumber = (value: string) => {
@@ -34,7 +36,8 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
   };
 
   const handleSearch = async () => {
-    const formattedNumber = query.trim();
+    const formattedNumber = numberValue.trim();
+    const normalizedFullName = fullName.trim();
     const isValid = /^\d{6}\s\d{7}$/.test(formattedNumber);
 
     if (!formattedNumber) {
@@ -55,10 +58,22 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
       return;
     }
 
+    if (!normalizedFullName) {
+      notifications.show({
+        title: "Введите ФИО",
+        message: "Укажите ФИО владельца диплома",
+        color: "orange",
+      });
+      return;
+    }
+
     const registrationNumber = formattedNumber.replace(/\s/g, "");
 
     try {
-      const diploma = await triggerSearch(registrationNumber).unwrap();
+      const diploma = await triggerSearch({
+        number: registrationNumber,
+        fullName: normalizedFullName,
+      }).unwrap();
       onResult(diploma);
       notifications.show({
         title: "Диплом найден",
@@ -69,7 +84,7 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
       onResult(null);
       notifications.show({
         title: "Диплом не найден",
-        message: "Проверьте номер и попробуйте снова",
+        message: "Проверьте номер, ФИО и попробуйте снова",
         color: "red",
       });
     }
@@ -100,9 +115,9 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
             </Text>
             <TextInput
               placeholder="123456 7890123"
-              value={query}
+              value={numberValue}
               onChange={(e) =>
-                setQuery(formatDiplomaNumber(e.currentTarget.value))
+                setNumberValue(formatDiplomaNumber(e.currentTarget.value))
               }
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -120,6 +135,21 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
                 Проверка происходит мгновенно
               </Text>
             </Group>
+
+            <TextInput
+              mt={8}
+              placeholder="Иванов Иван Иванович"
+              value={fullName}
+              onChange={(e) => setFullName(e.currentTarget.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  void handleSearch();
+                }
+              }}
+              leftSection={<IconUser size={18} />}
+              size="md"
+              radius="md"
+            />
           </Stack>
 
           <Button
