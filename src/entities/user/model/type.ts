@@ -1,9 +1,10 @@
-export type UserRole =
-  | "HR"
-  | "STUDENT"
-  | "ADMIN"
-  | "UNIVERSITY"
-  | "NEED_VERIFICATION";
+enum UserRole {
+  HR = "HR",
+  STUDENT = "Студент",
+  ADMIN = "Админ",
+  UNIVERSITY = "ВУЗ",
+  NEED_VERIFICATION = "Ждет подтверждения",
+}
 
 export interface IUserState {
   id?: number;
