@@ -50,7 +50,7 @@ export default function Result({
           <Badge
             color="green"
             variant="light"
-            size="md"
+            size="lg"
             radius="xl"
             fw={600}
             leftSection={
@@ -61,7 +61,7 @@ export default function Result({
                   color="green"
                   variant="filled"
                 >
-                  <IconCheck style={{ width: rem(8), height: rem(8) }} />
+                  <IconCheck/>
                 </ThemeIcon>
               ) : null
             }
@@ -82,48 +82,47 @@ export default function Result({
         <Divider />
 
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing={{ base: 20, sm: 24 }} verticalSpacing={20}>
-          {/* Выпускник */}
           <Stack gap={4}>
-            <Text size="xs" fw={500} c="text-secondary" tt="uppercase">
+            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
               Выпускник
             </Text>
-            <Text size="md" fw={600} c="text-primary" lh={1.4}>
+            <Text size="md" fw={600} lh={1.4}>
               {studentName}
             </Text>
           </Stack>
 
           <Stack gap={4}>
-            <Text size="xs" fw={500} c="text-secondary" tt="uppercase">
+            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
               Специальность
             </Text>
-            <Text size="md" fw={600} c="text-primary" lh={1.4}>
+            <Text size="md" fw={600} lh={1.4}>
               {specialty}
             </Text>
           </Stack>
 
           <Stack gap={4} >
-            <Text size="xs" fw={500} c="text-secondary" tt="uppercase">
+            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
               Учебное заведение
             </Text>
-            <Text size="md" fw={600} c="text-primary" lh={1.4}>
+            <Text size="md" fw={600} lh={1.4}>
               {institution}
             </Text>
           </Stack>
 
           <Stack gap={4}>
-            <Text size="xs" fw={500} c="text-secondary" tt="uppercase">
+            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
               Год выпуска
             </Text>
-            <Text size="md" fw={600} c="text-primary">
+            <Text size="md" fw={600}>
               {graduationYear}
             </Text>
           </Stack>
 
           <Stack gap={4}>
-            <Text size="xs" fw={500} c="text-secondary" tt="uppercase">
+            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
               Уровень
             </Text>
-            <Text size="md" fw={600} c="text-primary">
+            <Text size="md" fw={600}>
               {degree}
             </Text>
           </Stack>
