@@ -21,12 +21,12 @@ interface ResultProps {
 }
 
 export default function Result({
-  studentName = "Иванов Александр Сергеевич",
-  specialty = "Программная инженерия (09.03.04)",
-  institution = "Московский Государственный Технический Университет",
-  graduationYear = "2022",
-  degree = "Бакалавр",
-  status = true,
+  studentName,
+  specialty,
+  institution,
+  graduationYear,
+  degree,
+  status,
 }: ResultProps) {
   return (
     <Paper p={24} radius="lg" withBorder w={"100%"}>

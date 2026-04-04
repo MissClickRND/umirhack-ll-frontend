@@ -62,6 +62,8 @@ export const diplomaApi = baseApi.injectEndpoints({
             params: { number },
         }),
     }),
+
+    
   }),
 });
 

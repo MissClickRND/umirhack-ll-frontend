@@ -11,12 +11,12 @@ import { Router } from "./providers/routes/Router";
 import { AuthGuard } from "./providers/guards/AuthGuard";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <Provider store={store}>
-    <MantineProvider theme={theme} defaultColorScheme="light">
-      <AuthGuard>
-        <Notifications />
-        <Router />
-      </AuthGuard>
-    </MantineProvider>
-  </Provider>,
+    <Provider store={store}>
+      <MantineProvider theme={theme}>
+        <AuthGuard>
+          <Notifications />
+          <Router />
+        </AuthGuard>
+      </MantineProvider>
+    </Provider>
 );
