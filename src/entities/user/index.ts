@@ -1,8 +1,19 @@
 export { userLogout, setUser, userReducer, userSlice } from "./model/userSlice";
 export {
-  useGetProfileQuery,
   useGetUsersQuery,
-  useUpdateProfileMutation,
+  useGetVerifyRequestsQuery,
+  useVerifyRequestMutation,
   useUpdateRoleUserMutation,
+  useAttachMyDiplomaMutation,
 } from "./api/userApi";
-export type { IUserState, UserRole } from "./model/type";
+export type {
+  IAttachedDiplomaResponse,
+  IRoleChangeResponse,
+  IUpdateRolePayload,
+  IUserPublic,
+  IUserState,
+  IVerificationUser,
+  IVerifyRequestPayload,
+  UserRole,
+  VerifyAction,
+} from "./model/type";

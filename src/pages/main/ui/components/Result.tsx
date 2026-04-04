@@ -8,7 +8,6 @@ import {
   Divider,
   ThemeIcon,
   Stack,
-  rem,
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 
