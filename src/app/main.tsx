@@ -12,7 +12,6 @@ import { Router } from "./providers/routes/Router";
 import { AuthGuard } from "./providers/guards/AuthGuard";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
     <Provider store={store}>
       <MantineProvider theme={theme}>
         <AuthGuard>
@@ -21,5 +20,4 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </AuthGuard>
       </MantineProvider>
     </Provider>
-  </React.StrictMode>,
 );

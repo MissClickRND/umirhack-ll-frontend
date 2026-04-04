@@ -18,6 +18,6 @@ export const checkSlice = createSlice({
   },
 });
 
-// Экспорт действий и редюсера
+
 export const { setChecked } = checkSlice.actions;
 export const checkReducer = checkSlice.reducer;

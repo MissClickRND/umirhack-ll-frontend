@@ -1,5 +1,5 @@
 import { Grid, Paper, Stack, Title, Text, Box, Anchor } from "@mantine/core";
-import { IconSalad, IconBuildingBank, IconSchool } from "@tabler/icons-react";
+import { IconBuildingBank, IconSchool } from "@tabler/icons-react";
 import LoginOptionCard from "./LoginOptionCard";
 
 export default function Choose() {

@@ -1,4 +1,4 @@
-import { Grid, Stack, Badge, ThemeIcon, rem, Title, Text } from "@mantine/core";
+import { Grid, Stack, Title, Text } from "@mantine/core";
 import { IconShieldLock, IconDatabase, IconBolt } from "@tabler/icons-react";
 import FeatureItem from "./FeatureItem";
 
