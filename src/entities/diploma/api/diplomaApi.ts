@@ -1,8 +1,11 @@
 import { baseApi } from "@/shared/api";
 import {
+  IAttachMyDiplomaResponse,
+  ICreateQrTokenPayload,
   ICreateDiplomasBatchPayload,
   ICreateDiplomasBatchResponse,
   IDiploma,
+  IDiplomaUserToken,
   IUniversityDiploma,
   IUniversityDiplomasResponse,
   IUpdateDiplomaStatusPayload,
@@ -74,6 +77,48 @@ export const diplomaApi = baseApi.injectEndpoints({
         params: { number },
       }),
     }),
+    
+// ДЛЯ СТУДЕНТА
+
+    getUserDiplomas: build.query<IUniversityDiploma[], number>({
+      query: (userId) => `/diplomas/user/${userId}`,
+      providesTags: (_result, _error, userId) => [
+        { type: "Diploma", id: "USER_DIPLOMAS" },
+        { type: "Diploma", id: `USER_DIPLOMAS_${userId}` },
+      ],
+    }),
+
+    createDiplomaQrToken: build.mutation<IDiplomaUserToken, ICreateQrTokenPayload>({
+      query: ({ id, type }) => ({
+        url: `/diplomas/${id}/qr-token`,
+        method: "POST",
+        body: { type },
+      }),
+      invalidatesTags: [{ type: "Diploma", id: "USER_TOKENS" }],
+    }),
+
+    revokeDiplomaQrToken: build.mutation<{ success: boolean }, number>({
+      query: (tokenId) => ({
+        url: `/diplomas/qr-token/${tokenId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: "Diploma", id: "USER_TOKENS" }],
+    }),
+
+    getUserDiplomaTokens: build.query<IDiplomaUserToken[], number>({
+      query: (userId) => `/diplomas/${userId}/list`,
+      providesTags: [{ type: "Diploma", id: "USER_TOKENS" }],
+    }),
+
+    attachMyDiploma: build.mutation<IAttachMyDiplomaResponse, { id: number }>({
+      query: ({ id }) => ({
+        url: `/users/me/diplomas/${id}/attach`,
+        method: "PATCH",
+      }),
+      invalidatesTags: [{ type: "Diploma", id: "USER_DIPLOMAS" }],
+    }),
+
+    
   }),
 });
 
@@ -83,4 +128,9 @@ export const {
   useUpdateDiplomaStatusMutation,
   useGetDiplomaByIdQuery,
   useLazyGetDiplomaByIdQuery,
+  useGetUserDiplomasQuery,
+  useCreateDiplomaQrTokenMutation,
+  useRevokeDiplomaQrTokenMutation,
+  useGetUserDiplomaTokensQuery,
+  useAttachMyDiplomaMutation,
 } = diplomaApi;
