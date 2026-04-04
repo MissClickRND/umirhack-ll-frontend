@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUserState } from "./type";
+import { IUserState, UserRole } from "./type";
 
 const initialState: IUserState = {
   id: undefined,
   email: undefined,
-  role: "HR",
+  role: UserRole.HR,
+  universityId: null,
   createdAt: undefined,
   updatedAt: undefined,
 };
@@ -17,6 +18,7 @@ export const userSlice = createSlice({
       state.id = action.payload.id;
       state.email = action.payload.email;
       state.role = action.payload.role;
+      state.universityId = action.payload.universityId ?? null;
       state.createdAt = action.payload.createdAt;
       state.updatedAt = action.payload.updatedAt;
     },
@@ -24,7 +26,8 @@ export const userSlice = createSlice({
     userLogout: (state) => {
       state.id = undefined;
       state.email = undefined;
-      state.role = "HR";
+      state.role = UserRole.HR;
+      state.universityId = null;
       state.createdAt = undefined;
       state.updatedAt = undefined;
     },

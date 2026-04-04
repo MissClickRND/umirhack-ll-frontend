@@ -21,7 +21,7 @@ export default function NavList() {
     { label: "Интеграция API", path: "/api" },
     { label: "Личный кабинет", path: "/student", role: "STUDENT" },
     { label: "Панель администратора", path: "/admin", role: "ADMIN" },
-    { label: "Панель управления", path: "/university", role: "UNIVERSITY" },
+    { label: "Панель управления", path: "/edu-panel", role: "UNIVERSITY" },
   ];
 
   return (

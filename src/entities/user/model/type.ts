@@ -1,15 +1,16 @@
-enum UserRole {
+export enum UserRole {
+  ADMIN = "ADMIN",
   HR = "HR",
-  STUDENT = "Студент",
-  ADMIN = "Админ",
-  UNIVERSITY = "ВУЗ",
-  NEED_VERIFICATION = "Ждет подтверждения",
+  NEED_VERIFICATION = "NEED_VERIFICATION",
+  UNIVERSITY = "UNIVERSITY",
+  STUDENT = "STUDENT",
 }
 
 export interface IUserState {
   id?: number;
   email?: string;
   role?: UserRole;
+  universityId?: number | null;
   createdAt?: Date;
   updatedAt?: Date;
 }

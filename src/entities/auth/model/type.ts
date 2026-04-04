@@ -22,6 +22,7 @@ interface UserStatus {
   id: number;
   email: string;
   role: UserRole;
+  universityId?: number | null;
 }
 
 export interface IStatusResponse {
