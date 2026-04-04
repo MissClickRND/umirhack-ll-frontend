@@ -1,15 +1,17 @@
-import { Center, Stack, useMantineTheme } from "@mantine/core";
+import { Box, Stack, useMantineTheme } from "@mantine/core";
 import DiplomasList from "./components/DiplomasList";
+import ActiveLinks from "./components/ActiveLinks";
 
 
 export default function Student() {
-    const theme = useMantineTheme()
+    const theme = useMantineTheme();
 
     return (
-      <Center bg={theme.other.background} h="100%" p={'xl'}>
-        <Stack align="center" >
-            <DiplomasList/>
+      <Box bg={theme.other.background} h="100%" px={{ base: "md", sm: "xl" }} py="xl" style={{ overflowY: "auto" }}>
+        <Stack align="stretch" w="100%" maw={1200} mx="auto">
+            <DiplomasList />
+            <ActiveLinks />
         </Stack>
-      </Center>
+      </Box>
     );
 }
