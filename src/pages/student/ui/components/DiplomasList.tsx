@@ -1,38 +1,35 @@
-import { Badge, Box, Button, Group, Paper, Stack, Table, Text, Title } from "@mantine/core";
+import { Badge, Box, Button, Group, Loader, Paper, Stack, Table, Text, Title } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconPlus, IconShare } from "@tabler/icons-react";
 import { useState } from "react";
 import { Diploma } from "../../model/type";
 import SearchModal from "./SearchModal";
 import ShareLinkModal from "./ShareLinkModal";
+import { useAppSelector } from "@/shared/lib";
+import { selectUser } from "@/entities/user/model/userSelectors";
+import { useGetUserDiplomasQuery } from "@/entities/diploma";
 
 
 
 
 export default function DiplomasList() {
     const isMobile = useMediaQuery("(max-width: 64em)");
+    const user = useAppSelector(selectUser);
     const [opened, { open, close }] = useDisclosure(false);
     const [shareOpened, { open: openShare, close: closeShare }] = useDisclosure(false);
     const [selectedDiploma, setSelectedDiploma] = useState<Diploma | null>(null);
+    const { data: diplomas = [], isLoading, refetch } = useGetUserDiplomasQuery(user?.id ?? 0, {
+        skip: !user?.id,
+    });
 
-    const mockData: Diploma[] = [
-        {
-            id: 1,
-            institution: "МГТУ им. Баумана",
-            specialty: "Программная инженерия",
-            year: "2022",
-            diplomaNumber: "БВС 0123456",
-            status: true,
-        },
-        {
-            id: 2,
-            institution: "СПбГУ",
-            specialty: "Информатика и вычислительная техника",
-            year: "2020",
-            diplomaNumber: "БВС 0987654",
-            status: false,
-        },
-    ];
+    const data: Diploma[] = diplomas.map((diploma) => ({
+        id: diploma.id,
+        institution: diploma.university?.name ?? "Не указано",
+        specialty: diploma.specialty,
+        year: diploma.issuedAt ? String(new Date(diploma.issuedAt).getFullYear()) : "-",
+        diplomaNumber: diploma.registrationNumber,
+        status: diploma.status === "VALID" || diploma.status === "ISSUED",
+    }));
 
     const getStatusStyles = (status: boolean) => ({
         backgroundColor: status ? "var(--mantine-color-green-0)" : "var(--mantine-color-red-0)",
@@ -47,7 +44,7 @@ export default function DiplomasList() {
 
     return (
         <>
-            <SearchModal opened={opened} close={close} />
+            <SearchModal opened={opened} close={close} onAttached={refetch} />
             <ShareLinkModal opened={shareOpened} close={closeShare} diploma={selectedDiploma} />
             <Stack w="100%">
                 <Paper p={{ base: 16, sm: 24, md: 32 }} radius="lg" shadow="sm" withBorder>
@@ -69,9 +66,15 @@ export default function DiplomasList() {
 
 
                     <Stack mt={24} gap={16}>
-                        {isMobile ? (
+                        {isLoading ? (
+                            <Group justify="center" py="xl">
+                                <Loader />
+                            </Group>
+                        ) : data.length === 0 ? (
+                            <Text c="dimmed">У вас пока нет прикреплённых дипломов.</Text>
+                        ) : isMobile ? (
                             <Stack gap={12}>
-                                {mockData.map((row) => (
+                                {data.map((row) => (
                                     <Paper key={row.id} p={14} radius="md" withBorder>
                                         <Stack gap={10}>
                                             <Box>
@@ -143,7 +146,7 @@ export default function DiplomasList() {
                                     </Table.Thead>
 
                                     <Table.Tbody>
-                                        {mockData.map((row) => (
+                                        {data.map((row) => (
                                             <Table.Tr key={row.id}>
                                                 <Table.Td fw={500}>{row.institution}</Table.Td>
                                                 <Table.Td>{row.specialty}</Table.Td>
