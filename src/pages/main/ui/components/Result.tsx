@@ -33,7 +33,7 @@ export default function Result({
 
   return (
     <Paper
-      p={{ base: 24, sm: 32 }}
+      p={24}
       radius="lg"
       withBorder
 
