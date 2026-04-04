@@ -101,7 +101,9 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
             <TextInput
               placeholder="123456 7890123"
               value={query}
-              onChange={(e) => setQuery(formatDiplomaNumber(e.currentTarget.value))}
+              onChange={(e) =>
+                setQuery(formatDiplomaNumber(e.currentTarget.value))
+              }
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
                   void handleSearch();
@@ -115,7 +117,7 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
             <Group justify="flex-start" gap={4}>
               <IconAlertCircle size={14} color="var(--mantine-color-dimmed)" />
               <Text size="xs" c="dimmed">
-                Проверка занимает менее 30 секунд
+                Проверка происходит мгновенно
               </Text>
             </Group>
           </Stack>

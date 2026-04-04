@@ -1,8 +1,11 @@
-export type DegreeLevel =
-  | "BACHELOR"
-  | "MAGISTRACY"
-  | "SPECIALIST"
-  | "DOCTORATE";
+export const DegreeLevel = {
+  BACHELOR: "Бакалавриат",
+  MAGISTRACY: "Магистратура",
+  SPECIALIST: "Специалитет",
+  DOCTORATE: "Докторантура",
+} as const;
+
+type DegreeLevel = (typeof DegreeLevel)[keyof typeof DegreeLevel];
 
 export type DiplomaStatus = "ISSUED" | "VALID" | "REVOKED";
 
@@ -52,24 +55,24 @@ export interface IUpdateDiplomaStatusPayload {
 }
 
 export interface IDiploma {
-    id: number;
-    fullNameAuthor: string;
-    registrationNumber: string;
-    userId: number;
-    universityId: number;
-    issuedAt: string;
-    specialty: string;
-    degreeLevel: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-    university: IUniversityShort;
+  id: number;
+  fullNameAuthor: string;
+  registrationNumber: string;
+  userId: number;
+  universityId: number;
+  issuedAt: string;
+  specialty: string;
+  degreeLevel: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  university: IUniversityShort;
 }
 
 export interface IUniversityShort {
-    id: number,
-    name: string,
-    shortName: string,
-    createdAt: string,
-    updatedAt: string
+  id: number;
+  name: string;
+  shortName: string;
+  createdAt: string;
+  updatedAt: string;
 }

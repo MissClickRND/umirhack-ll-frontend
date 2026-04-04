@@ -7,7 +7,6 @@ export {
 } from "./api/diplomaApi";
 
 export type {
-  DegreeLevel,
   DiplomaStatus,
   ICreateDiplomaItem,
   ICreateDiplomasBatchPayload,
@@ -15,5 +14,7 @@ export type {
   IUniversityDiploma,
   IUpdateDiplomaStatusPayload,
   IDiploma,
-  IUniversityShort
+  IUniversityShort,
 } from "./model/type";
+
+export { DegreeLevel } from "./model/type";

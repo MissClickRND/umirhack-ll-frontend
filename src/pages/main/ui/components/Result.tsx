@@ -1,3 +1,4 @@
+import { DegreeLevel } from "@/entities/diploma";
 import {
   Paper,
   Title,
@@ -28,6 +29,11 @@ export default function Result({
   degree,
   status,
 }: ResultProps) {
+  const degreeLabel =
+    degree && degree in DegreeLevel
+      ? DegreeLevel[degree as keyof typeof DegreeLevel]
+      : degree;
+
   return (
     <Paper p={24} radius="lg" withBorder w={"100%"}>
       <Stack gap={24}>
@@ -119,7 +125,7 @@ export default function Result({
               Уровень
             </Text>
             <Text size="md" fw={600}>
-              {degree}
+              {degreeLabel}
             </Text>
           </Stack>
         </SimpleGrid>

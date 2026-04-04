@@ -19,7 +19,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const links = [
   { label: "Проверка", path: "/" },
-  { label: "Интеграция API", path: "/api" },
+  { label: "Интеграция API", path: "/public-api" },
 ];
 
 export default function Header() {

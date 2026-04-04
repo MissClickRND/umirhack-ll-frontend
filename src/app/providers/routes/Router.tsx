@@ -9,6 +9,7 @@ import StudentRegister from "@/pages/auth/ui/StudentRegister.page";
 import UniversityRegister from "@/pages/auth/ui/UniversityRegister.page";
 import Admin from "@/pages/admin/ui/Admin.page";
 import EduPanelPage from "@/pages/edu-panel/ui/EduPanel.page";
+import PublicApiPage from "@/pages/public-api/ui/PublicApi.page";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Main />,
+      },
+      {
+        path: "/public-api",
+        element: <PublicApiPage />,
       },
       {
         path: "/student",
