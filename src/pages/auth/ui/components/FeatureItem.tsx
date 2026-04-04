@@ -7,31 +7,31 @@ interface FeatureItemProps {
   color: string;
 }
 
-export default function FeatureItem({ icon, title, description, color }: FeatureItemProps) {
-    
-
-    return (
-        <Group gap={16}>
-            <ThemeIcon
-                size={48}
-                radius="md"
-                variant="light"
-                color={color}
-                style={{ flexShrink: 0 }}
-            >
-                {icon}
-            </ThemeIcon>
-            <Box>
-                <Text fw={600} size="md" mb={4}>
-                    {title}
-                </Text>
-                <Text size="sm" c="dimmed" lh={1.4}>
-                    {description}
-                </Text>
-            </Box>
-        </Group>
-    );
+export default function FeatureItem({
+  icon,
+  title,
+  description,
+  color,
+}: FeatureItemProps) {
+  return (
+    <Group gap={16}>
+      <ThemeIcon
+        size={40}
+        radius="md"
+        variant="light"
+        color={color}
+        style={{ flexShrink: 0 }}
+      >
+        {icon}
+      </ThemeIcon>
+      <Box>
+        <Text fw={600} size="md" mb={4}>
+          {title}
+        </Text>
+        <Text size="sm" c="dimmed" lh={1.4}>
+          {description}
+        </Text>
+      </Box>
+    </Group>
+  );
 }
-
-
-

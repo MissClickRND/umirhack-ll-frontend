@@ -1,11 +1,29 @@
-import { Grid, Stack, Badge, ThemeIcon, rem, Title, Text } from "@mantine/core";
+import {
+  Grid,
+  Stack,
+  Title,
+  Text,
+  useMantineColorScheme,
+  useMantineTheme,
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconShieldLock, IconDatabase, IconBolt } from "@tabler/icons-react";
 import FeatureItem from "./FeatureItem";
 
 export default function Description() {
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
+  const isTablet = useMediaQuery("(max-width: 64em)");
+  const isMobile = useMediaQuery("(max-width: 48em)");
+
+  const sectionGap = isMobile ? 24 : isTablet ? 32 : 40;
+  const featuresGap = isMobile ? 16 : 24;
+  const titleSize = isMobile ? "2rem" : isTablet ? "2.5rem" : "3rem";
+
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
-      <Stack gap={40}>
+      <Stack gap={sectionGap}>
         {/* <Badge
                     variant="light"
                     color="brand"
@@ -19,36 +37,46 @@ export default function Description() {
                     Безопасный доступ
                 </Badge> */}
 
-        <Title order={1} size="h1" lh={1.2}>
+        <Title order={1} lh={1.2} style={{ fontSize: titleSize }}>
           Добро пожаловать в <br />
-          <span style={{ color: "var(--mantine-color-brand-5)" }}>
+          <span
+            style={{
+              color: isDark
+                ? "var(--mantine-color-primaryDark-5)"
+                : "var(--mantine-color-primary-5)",
+            }}
+          >
             TrustEDU
           </span>
         </Title>
 
-        <Text size="lg" c="dimmed" lh={1.6}>
+        <Text
+          size={isMobile ? "md" : "lg"}
+          c={isDark ? theme.other.textSecondaryDark : theme.other.textSecondary}
+          lh={1.6}
+        >
           Проверяйте подлинность дипломов и управляйте документами об
           образовании в едином защищённом пространстве.
         </Text>
 
-        <Stack gap={24}>
+        <Stack gap={featuresGap}>
           <FeatureItem
             icon={<IconDatabase />}
             title="Единая база"
             description="Все документы хранятся в защищённой базе данных, доступной 24/7"
-            color="brand"
+            color={isDark ? "primaryDark" : "primary"}
           />
           <FeatureItem
             icon={<IconShieldLock />}
             title="Защита данных"
-            description="Шифрование всех данных по ГОСТ"
-            color="brand"
+            description="Шифрование всех данных по ГОСТ, проверка публичным и приватным ключом."
+            color={isDark ? "primaryDark" : "primary"}
           />
           <FeatureItem
             icon={<IconBolt />}
             title="Мгновенная проверка"
             description="Получите результат мгновенно, без посредников и бумажных справок"
-            color="brand"
+            color={isDark ? "primaryDark" : "primary"}
           />
         </Stack>
       </Stack>

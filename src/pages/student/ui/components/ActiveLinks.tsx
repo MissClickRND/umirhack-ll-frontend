@@ -9,14 +9,12 @@ import {
   ActionIcon,
   Group,
   Stack,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconLock, IconEye } from "@tabler/icons-react";
 import { LinkHistoryItem } from "../../model/type";
-
-
-
-
 
 const data: LinkHistoryItem[] = [
   {
@@ -45,15 +43,30 @@ const data: LinkHistoryItem[] = [
   },
 ];
 
-export default function ActiveLinks () {
+export default function ActiveLinks() {
   const isMobile = useMediaQuery("(max-width: 64em)");
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
 
   const getStatusStyles = (status: LinkHistoryItem["status"]) => {
     const isActive = status === "active";
 
     return {
-      backgroundColor: isActive ? "var(--mantine-color-green-0)" : "var(--mantine-color-red-0)",
-      color: isActive ? "var(--mantine-color-green-9)" : "var(--mantine-color-red-9)",
+      backgroundColor: isActive
+        ? isDark
+          ? "rgba(64, 192, 87, 0.18)"
+          : "var(--mantine-color-green-0)"
+        : isDark
+          ? "rgba(250, 82, 82, 0.18)"
+          : "var(--mantine-color-red-0)",
+      color: isActive
+        ? isDark
+          ? "var(--mantine-color-green-2)"
+          : "var(--mantine-color-green-9)"
+        : isDark
+          ? "var(--mantine-color-red-2)"
+          : "var(--mantine-color-red-9)",
       padding: "0 16px",
     };
   };
@@ -62,19 +75,43 @@ export default function ActiveLinks () {
     switch (status) {
       case "active":
         return (
-          <Badge variant="light" radius="xl" size="sm" fw={600} fz={10} miw={110} style={getStatusStyles(status)}>
+          <Badge
+            variant="light"
+            radius="xl"
+            size="sm"
+            fw={600}
+            fz={10}
+            miw={110}
+            style={getStatusStyles(status)}
+          >
             Активна
           </Badge>
         );
       case "revoked":
         return (
-          <Badge variant="light" radius="xl" size="sm" fw={600} fz={10} miw={110} style={getStatusStyles(status)}>
+          <Badge
+            variant="light"
+            radius="xl"
+            size="sm"
+            fw={600}
+            fz={10}
+            miw={110}
+            style={getStatusStyles(status)}
+          >
             Отозвана
           </Badge>
         );
       case "expired":
         return (
-          <Badge variant="light" radius="xl" size="sm" fw={600} fz={10} miw={110} style={getStatusStyles(status)}>
+          <Badge
+            variant="light"
+            radius="xl"
+            size="sm"
+            fw={600}
+            fz={10}
+            miw={110}
+            style={getStatusStyles(status)}
+          >
             Истекла
           </Badge>
         );
@@ -89,13 +126,17 @@ export default function ActiveLinks () {
       shadow="sm"
       withBorder
     >
-
       <Group justify="space-between" align="center" mb="md" wrap="nowrap">
         <Title order={2} size={isMobile ? "h3" : "h2"} fw={700}>
           Активные ссылки и история
         </Title>
         <Group gap={6} visibleFrom="sm">
-          <IconLock size={14} color="var(--mantine-color-text-secondary)" />
+          <IconLock
+            size={14}
+            color={
+              isDark ? theme.other.textSecondaryDark : theme.other.textSecondary
+            }
+          />
           <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
             Данные защищены и не передаются третьим лицам
           </Text>
@@ -149,7 +190,12 @@ export default function ActiveLinks () {
                       Неактивна
                     </Button>
                   )}
-                  <ActionIcon variant="light" radius="md" color="gray" size="lg">
+                  <ActionIcon
+                    variant="light"
+                    radius="md"
+                    color="gray"
+                    size="lg"
+                  >
                     <IconEye size={16} />
                   </ActionIcon>
                 </Group>
@@ -182,7 +228,12 @@ export default function ActiveLinks () {
                   <Table.Td>
                     <Group gap={8} miw={120} justify="center">
                       {row.status === "active" ? (
-                        <Button variant="light" size="xs" radius="md" color="red">
+                        <Button
+                          variant="light"
+                          size="xs"
+                          radius="md"
+                          color="red"
+                        >
                           Отозвать
                         </Button>
                       ) : (
@@ -190,7 +241,12 @@ export default function ActiveLinks () {
                           —
                         </Text>
                       )}
-                      <ActionIcon variant="light" radius="md" color="gray" size="sm">
+                      <ActionIcon
+                        variant="light"
+                        radius="md"
+                        color="gray"
+                        size="sm"
+                      >
                         <IconEye size={16} />
                       </ActionIcon>
                     </Group>

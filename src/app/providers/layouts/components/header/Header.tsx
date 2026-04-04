@@ -8,6 +8,8 @@ import {
   Stack,
   Text,
   UnstyledButton,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileButton from "./components/ProfileButton";
@@ -21,6 +23,9 @@ const links = [
 ];
 
 export default function Header() {
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
   const [opened, { close, toggle }] = useDisclosure(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,8 +44,10 @@ export default function Header() {
           position: "sticky",
           top: 0,
           zIndex: 200,
-          backgroundColor: "var(--mantine-color-body)",
-          borderBottom: "1px solid var(--mantine-color-gray-2)",
+          backgroundColor: isDark
+            ? theme.other.surfaceDark
+            : theme.other.surface,
+          borderBottom: `1px solid ${isDark ? theme.other.outlineDark : theme.other.outline}`,
         }}
       >
         <Container size="xl">
@@ -51,7 +58,12 @@ export default function Header() {
               <Box visibleFrom="sm">
                 <ProfileButton />
               </Box>
-              <Burger hiddenFrom="sm" opened={opened} onClick={toggle} aria-label="Открыть меню" />
+              <Burger
+                hiddenFrom="sm"
+                opened={opened}
+                onClick={toggle}
+                aria-label="Открыть меню"
+              />
             </Group>
           </Group>
 
@@ -67,10 +79,25 @@ export default function Header() {
                     style={{
                       borderRadius: 8,
                       padding: "10px 12px",
-                      backgroundColor: isActive ? "var(--mantine-color-brand-0)" : "transparent",
+                      backgroundColor: isActive
+                        ? isDark
+                          ? "var(--mantine-color-primaryDark-8)"
+                          : "var(--mantine-color-primary-0)"
+                        : "transparent",
                     }}
                   >
-                    <Text fw={isActive ? 600 : 500} c={isActive ? "brand.7" : "text-primary"}>
+                    <Text
+                      fw={isActive ? 600 : 500}
+                      c={
+                        isActive
+                          ? isDark
+                            ? "primaryDark.2"
+                            : "primary.7"
+                          : isDark
+                            ? theme.other.textPrimaryDark
+                            : theme.other.textPrimary
+                      }
+                    >
                       {link.label}
                     </Text>
                   </UnstyledButton>

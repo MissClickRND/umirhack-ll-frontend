@@ -14,7 +14,7 @@ import { AuthGuard } from "./providers/guards/AuthGuard";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <MantineProvider theme={theme}>
+      <MantineProvider theme={theme} defaultColorScheme="light">
         <AuthGuard>
           <Notifications />
           <Router />

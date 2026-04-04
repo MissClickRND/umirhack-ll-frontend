@@ -13,6 +13,8 @@ import {
   Paper,
   Grid,
   Title,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
@@ -26,6 +28,9 @@ interface RegisterFormValues {
 
 export default function StudentRegister() {
   const navigate = useNavigate();
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
   const [register, { isLoading }] = useStudentRegisterMutation();
   const dispatch = useAppDispatch();
   const { showError, showSuccess } = useNotifications();
@@ -64,7 +69,12 @@ export default function StudentRegister() {
 
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
-      <Paper p={40} radius="lg" shadow="xl" withBorder>
+      <Paper
+        p={{ base: 20, sm: 28, md: 40 }}
+        radius="lg"
+        shadow="xl"
+        withBorder
+      >
         <LoadingOverlay visible={isLoading} />
         <Stack gap="xl">
           <Center>
@@ -106,10 +116,16 @@ export default function StudentRegister() {
             </Stack>
           </form>
 
-          <Text fz="sm" c="dark.4" ta="center">
+          <Text
+            fz="sm"
+            c={
+              isDark ? theme.other.textSecondaryDark : theme.other.textSecondary
+            }
+            ta="center"
+          >
             Уже есть аккаунт?{" "}
             <Anchor
-              c="primary.6"
+              c={isDark ? "primaryDark.4" : "primary.6"}
               fw={500}
               onClick={() => navigate("/auth/login")}
               style={{ cursor: "pointer" }}

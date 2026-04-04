@@ -29,18 +29,10 @@ export default function Result({
   degree = "Бакалавр",
   status = true,
 }: ResultProps) {
-
-
   return (
-    <Paper
-      p={24}
-      radius="lg"
-      withBorder
-
-      w={'100%'}
-    >
+    <Paper p={24} radius="lg" withBorder w={"100%"}>
       <Stack gap={24}>
-        <Group justify="space-between" align="center" wrap="nowrap">
+        <Group justify="space-between" align="center" wrap="wrap" gap={12}>
           <Stack gap={4}>
             <Title order={3} size="h4">
               Результат проверки
@@ -55,13 +47,8 @@ export default function Result({
             fw={600}
             leftSection={
               status ? (
-                <ThemeIcon
-                  size={14}
-                  radius="xl"
-                  color="green"
-                  variant="filled"
-                >
-                  <IconCheck/>
+                <ThemeIcon size={14} radius="xl" color="green" variant="filled">
+                  <IconCheck />
                 </ThemeIcon>
               ) : null
             }
@@ -69,7 +56,7 @@ export default function Result({
               backgroundColor: status
                 ? "var(--mantine-color-green-0)"
                 : "var(--mantine-color-red-0)",
-              color: status 
+              color: status
                 ? "var(--mantine-color-green-9)"
                 : "var(--mantine-color-red-9)",
               padding: "0 16px",
@@ -81,9 +68,13 @@ export default function Result({
 
         <Divider />
 
-        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing={{ base: 20, sm: 24 }} verticalSpacing={20}>
+        <SimpleGrid
+          cols={{ base: 1, sm: 2 }}
+          spacing={{ base: 20, sm: 24 }}
+          verticalSpacing={20}
+        >
           <Stack gap={4}>
-            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
+            <Text size="xs" fw={500} c="dimmed" tt="uppercase">
               Выпускник
             </Text>
             <Text size="md" fw={600} lh={1.4}>
@@ -92,7 +83,7 @@ export default function Result({
           </Stack>
 
           <Stack gap={4}>
-            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
+            <Text size="xs" fw={500} c="dimmed" tt="uppercase">
               Специальность
             </Text>
             <Text size="md" fw={600} lh={1.4}>
@@ -100,8 +91,8 @@ export default function Result({
             </Text>
           </Stack>
 
-          <Stack gap={4} >
-            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
+          <Stack gap={4}>
+            <Text size="xs" fw={500} c="dimmed" tt="uppercase">
               Учебное заведение
             </Text>
             <Text size="md" fw={600} lh={1.4}>
@@ -110,7 +101,7 @@ export default function Result({
           </Stack>
 
           <Stack gap={4}>
-            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
+            <Text size="xs" fw={500} c="dimmed" tt="uppercase">
               Год выпуска
             </Text>
             <Text size="md" fw={600}>
@@ -119,7 +110,7 @@ export default function Result({
           </Stack>
 
           <Stack gap={4}>
-            <Text size="xs" fw={500} c='dimmed' tt="uppercase">
+            <Text size="xs" fw={500} c="dimmed" tt="uppercase">
               Уровень
             </Text>
             <Text size="md" fw={600}>

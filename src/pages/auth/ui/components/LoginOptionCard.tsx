@@ -21,30 +21,32 @@ export default function LoginOptionCard({
 
   return (
     <Paper
-      p={20}
+      p={{ base: 14, sm: 20 }}
       radius="md"
       withBorder
       style={{ cursor: "pointer" }}
       onClick={() => navigate(link)}
     >
-      <Group justify="space-between" gap={16}>
-        <Group gap={16}>
+      <Group justify="space-between" gap={16} wrap="nowrap">
+        <Group gap={16} wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
           <ThemeIcon size={48} radius="md" variant="light" color={color}>
             {icon}
           </ThemeIcon>
-          <Box>
+          <Box style={{ minWidth: 0 }}>
             <Text fw={600} size="md" mb={4}>
               {title}
             </Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" lineClamp={2}>
               {description}
             </Text>
           </Box>
         </Group>
-        <IconChevronRight
-          style={{ width: rem(20), height: rem(20) }}
-          color="var(--mantine-color-dimmed)"
-        />
+        <Box visibleFrom="sm">
+          <IconChevronRight
+            style={{ width: rem(20), height: rem(20) }}
+            color="var(--mantine-color-dimmed)"
+          />
+        </Box>
       </Group>
     </Paper>
   );

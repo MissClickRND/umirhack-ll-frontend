@@ -15,11 +15,16 @@ import {
   Paper,
   Grid,
   Title,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { useLoginMutation } from "@/entities/auth";
 
 export default function Login() {
   const navigate = useNavigate();
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const { showError, showSuccess } = useNotifications();
@@ -51,7 +56,12 @@ export default function Login() {
 
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
-      <Paper p={40} radius="lg" shadow="xl" withBorder>
+      <Paper
+        p={{ base: 20, sm: 28, md: 40 }}
+        radius="lg"
+        shadow="xl"
+        withBorder
+      >
         <LoadingOverlay visible={isLoading} />
         <Stack gap="xl">
           <Center>
@@ -84,10 +94,16 @@ export default function Login() {
             </Stack>
           </form>
 
-          <Text fz="sm" c="dark.4" ta="center">
+          <Text
+            fz="sm"
+            c={
+              isDark ? theme.other.textSecondaryDark : theme.other.textSecondary
+            }
+            ta="center"
+          >
             Нет аккаунта?{" "}
             <Anchor
-              c="primary.6"
+              c={isDark ? "primaryDark.4" : "primary.6"}
               fw={500}
               onClick={() => navigate("/auth/register")}
               style={{ cursor: "pointer" }}

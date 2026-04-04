@@ -1,18 +1,29 @@
-import { Stack, useMantineTheme, Center } from "@mantine/core";
+import {
+  Stack,
+  useMantineTheme,
+  Center,
+  useMantineColorScheme,
+} from "@mantine/core";
 import SearchDiploma from "./components/SearchDiploma";
 import Result from "./components/Result";
 import { useAppSelector } from "@/shared/lib";
 
 export default function Main() {
-    const theme = useMantineTheme();
-    const state = useAppSelector((state) => state.check);
-  
-    return (
-      <Center bg={theme.other.background} h="100%" p={'xl'}>
-        <Stack align="center" maw={650}>
-          <SearchDiploma/>
-          {state.isChecked && <Result/>}
-        </Stack>
-      </Center>
-    );
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
+  const state = useAppSelector((state) => state.check);
+
+  return (
+    <Center
+      bg={isDark ? theme.other.backgroundDark : theme.other.background}
+      h="100%"
+      p={{ base: "md", sm: "xl" }}
+    >
+      <Stack align="center" maw={650} w="100%">
+        <SearchDiploma />
+        {state.isChecked && <Result />}
+      </Stack>
+    </Center>
+  );
 }

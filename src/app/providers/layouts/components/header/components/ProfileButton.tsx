@@ -11,6 +11,7 @@ import {
   Button,
   Text,
   useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { IconUser, IconMoon, IconSun, IconLogout } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +21,9 @@ export default function ProfileButton() {
   const dispatch = useAppDispatch();
   const [logout] = useLogoutMutation();
   const user = useAppSelector(selectUser);
+  const theme = useMantineTheme();
   const { setColorScheme, colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
 
   return (
     <Box>
@@ -33,19 +36,28 @@ export default function ProfileButton() {
                 <Avatar radius="xl" size="sm" color="brand">
                   <IconUser size={16} />
                 </Avatar>
-                <Text size="sm" fw={500} c="text-primary" visibleFrom="sm">
+                <Text
+                  size="sm"
+                  fw={500}
+                  c={
+                    isDark
+                      ? theme.other.textPrimaryDark
+                      : theme.other.textPrimary
+                  }
+                  visibleFrom="sm"
+                >
                   {user?.email}
                 </Text>
               </Group>
             </UnstyledButton>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item
+            {/* <Menu.Item
               leftSection={<IconUser size={18} />}
               onClick={() => navigate("/profile")}
             >
               Профиль
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item
               leftSection={
                 colorScheme === "light" ? (
@@ -73,7 +85,7 @@ export default function ProfileButton() {
         // ...неавторизованный пользователь
         <Button
           variant="filled"
-          color="brand"
+          color={isDark ? "primaryDark" : "primary"}
           leftSection={<IconUser size={18} />}
           onClick={() => navigate("/auth/login")}
           radius={"md"}

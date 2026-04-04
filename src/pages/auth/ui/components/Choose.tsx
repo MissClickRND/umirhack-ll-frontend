@@ -1,11 +1,28 @@
-import { Grid, Paper, Stack, Title, Text, Box, Anchor } from "@mantine/core";
-import { IconSalad, IconBuildingBank, IconSchool } from "@tabler/icons-react";
+import {
+  Grid,
+  Paper,
+  Stack,
+  Title,
+  Text,
+  Box,
+  Anchor,
+  useMantineColorScheme,
+} from "@mantine/core";
+import { IconBuildingBank, IconSchool } from "@tabler/icons-react";
 import LoginOptionCard from "./LoginOptionCard";
 
 export default function Choose() {
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
+
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
-      <Paper p={40} radius="lg" shadow="xl" withBorder>
+      <Paper
+        p={{ base: 20, sm: 28, md: 40 }}
+        radius="lg"
+        shadow="xl"
+        withBorder
+      >
         <Stack gap={32}>
           <Stack gap={8} align="center">
             <Title order={2} size="h3" ta="center">
@@ -29,18 +46,26 @@ export default function Choose() {
               icon={<IconBuildingBank />}
               title="Учебное заведение"
               description="Управление записями и выдача документов"
-              color="brand"
+              color={isDark ? "primaryDark" : "primary"}
             />
           </Stack>
 
           <Box mt={16}>
             <Text size="xs" c="dimmed" ta="center" lh={1.5}>
               Входя в систему, вы соглашаетесь с{" "}
-              <Anchor href="/terms" size="xs" c="brand.6">
+              <Anchor
+                href="/terms"
+                size="xs"
+                c={isDark ? "primaryDark.4" : "primary.6"}
+              >
                 условиями использования
               </Anchor>{" "}
               и{" "}
-              <Anchor href="/privacy" size="xs" c="brand.6">
+              <Anchor
+                href="/privacy"
+                size="xs"
+                c={isDark ? "primaryDark.4" : "primary.6"}
+              >
                 политикой конфиденциальности
               </Anchor>
             </Text>

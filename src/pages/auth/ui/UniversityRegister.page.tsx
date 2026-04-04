@@ -15,7 +15,8 @@ import {
   Grid,
   Title,
   ThemeIcon,
-  Box,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconClockHour4 } from "@tabler/icons-react";
@@ -33,6 +34,9 @@ interface RegisterFormValues {
 export default function UniversityRegister() {
   const user = useAppSelector(selectUser);
   const navigate = useNavigate();
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
   const [register, { isLoading }] = useUniversityRegisterMutation();
   const dispatch = useAppDispatch();
   const { showError, showSuccess } = useNotifications();
@@ -83,7 +87,12 @@ export default function UniversityRegister() {
 
   return (
     <Grid.Col span={{ base: 12, md: 6 }}>
-      <Paper p={40} radius="lg" shadow="xl" withBorder>
+      <Paper
+        p={{ base: 20, sm: 28, md: 40 }}
+        radius="lg"
+        shadow="xl"
+        withBorder
+      >
         <LoadingOverlay visible={isLoading} />
         <Stack gap="xl">
           <Center>
@@ -126,9 +135,16 @@ export default function UniversityRegister() {
                     p="sm"
                     radius="md"
                     withBorder
-                    style={{ backgroundColor: "var(--mantine-color-blue-0)" }}
+                    style={{
+                      backgroundColor: isDark
+                        ? theme.other.surfaceSecondaryDark
+                        : "var(--mantine-color-blue-0)",
+                      borderColor: isDark
+                        ? theme.other.outlineDark
+                        : "var(--mantine-color-blue-2)",
+                    }}
                   >
-                    <Text fz="sm" c="blue.9">
+                    <Text fz="sm" c={isDark ? "blue.2" : "blue.9"}>
                       После регистрации мы свяжемся с вами по электронной почте
                       в течение 1-2 рабочих дней для подтверждения данных вуза.
                     </Text>
@@ -163,10 +179,18 @@ export default function UniversityRegister() {
                   </Button>
                 </Stack>
               </form>
-              <Text fz="sm" c="dark.4" ta="center">
+              <Text
+                fz="sm"
+                c={
+                  isDark
+                    ? theme.other.textSecondaryDark
+                    : theme.other.textSecondary
+                }
+                ta="center"
+              >
                 Уже есть аккаунт?{" "}
                 <Anchor
-                  c="primary.6"
+                  c={isDark ? "primaryDark.4" : "primary.6"}
                   fw={500}
                   onClick={() => navigate("/auth/login")}
                   style={{ cursor: "pointer" }}
@@ -182,10 +206,21 @@ export default function UniversityRegister() {
               withBorder
               radius="md"
               p="xl"
-              style={{ backgroundColor: "var(--mantine-color-brand-0)" }}
+              style={{
+                backgroundColor: isDark
+                  ? theme.other.surfaceSecondaryDark
+                  : "var(--mantine-color-primary-0)",
+                borderColor: isDark
+                  ? theme.other.outlineDark
+                  : theme.other.outline,
+              }}
             >
               <Stack gap="md" align="center">
-                <ThemeIcon size={56} radius="xl">
+                <ThemeIcon
+                  size={56}
+                  radius="xl"
+                  color={isDark ? "primaryDark" : "primary"}
+                >
                   <IconClockHour4 size={30} />
                 </ThemeIcon>
 
@@ -198,7 +233,12 @@ export default function UniversityRegister() {
                   проверки данных университета.
                 </Text>
 
-                <Button onClick={() => navigate("/")}>На главную</Button>
+                <Button
+                  color={isDark ? "primaryDark" : "primary"}
+                  onClick={() => navigate("/")}
+                >
+                  На главную
+                </Button>
               </Stack>
             </Paper>
           )}
