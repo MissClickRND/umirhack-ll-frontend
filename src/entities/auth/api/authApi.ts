@@ -24,6 +24,10 @@ export const authApi = baseApi.injectEndpoints({
           short_name: data.short_name,
         },
       }),
+      invalidatesTags: [
+        { type: "User", id: "LIST" },
+        { type: "User", id: "VERIFY_REQUESTS" },
+      ],
     }),
 
     studentRegister: build.mutation<
@@ -39,6 +43,10 @@ export const authApi = baseApi.injectEndpoints({
           password: data.password,
         },
       }),
+      invalidatesTags: [
+        { type: "User", id: "LIST" },
+        { type: "User", id: "VERIFY_REQUESTS" },
+      ],
     }),
 
     login: build.mutation<{ user: IUserState }, ILoginRequest>({
