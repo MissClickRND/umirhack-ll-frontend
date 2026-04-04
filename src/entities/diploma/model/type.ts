@@ -108,6 +108,22 @@ export interface IDiplomaUserToken {
   updatedAt: string;
 }
 
+export interface IDiplomaUserTokenMeta {
+  id: number;
+  diplomaId: number;
+  expiresAt: string | null;
+  revokedAt: string | null;
+  isOneTime: boolean;
+  lastUsedAt: string | null;
+  createdAt: string;
+}
+
+export interface IUserDiplomaTokenItem {
+  token: string;
+  tokenMeta: IDiplomaUserTokenMeta;
+  diploma: IUniversityDiploma;
+}
+
 export interface IAttachMyDiplomaResponse {
   id: number;
   userId: number;

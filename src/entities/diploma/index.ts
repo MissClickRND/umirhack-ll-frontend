@@ -20,6 +20,8 @@ export type {
   ICreateQrTokenPayload,
   IAttachMyDiplomaResponse,
   IDiplomaUserToken,
+  IDiplomaUserTokenMeta,
+  IUserDiplomaTokenItem,
   IUniversityDiploma,
   IUniversityDiplomasResponse,
   IUpdateDiplomaStatusPayload,

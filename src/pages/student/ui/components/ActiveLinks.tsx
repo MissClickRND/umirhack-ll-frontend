@@ -1,47 +1,30 @@
 import {
-  Box,
   Paper,
   Title,
   Text,
-  Table,
-  Badge,
-  Button,
-  ActionIcon,
   Group,
-  Stack,
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconLock, IconEye } from "@tabler/icons-react";
-import { LinkHistoryItem } from "../../model/type";
-
-const data: LinkHistoryItem[] = [
-  {
-    id: 1,
-    diplomaNumber: "БВС 0123456",
-    token: "verify.edu/x7k9m2",
-    createdAt: "13 апр, 14:30",
-    validUntil: "14 апр, 14:30",
-    status: "active",
-  },
-  {
-    id: 2,
-    diplomaNumber: "БВС 0987654",
-    token: "verify.edu/a3n8p1",
-    createdAt: "10 апр, 09:15",
-    validUntil: "11 апр, 09:15",
-    status: "revoked",
-  },
-  {
-    id: 3,
-    diplomaNumber: "БВС 0123456",
-    token: "verify.edu/m5q7r9",
-    createdAt: "08 апр, 16:45",
-    validUntil: "09 апр, 16:45",
-    status: "expired",
-  },
-];
+import { notifications } from "@mantine/notifications";
+import { IconLock } from "@tabler/icons-react";
+import {
+  IUserDiplomaTokenItem,
+  useGetUserDiplomaTokensQuery,
+  useRevokeDiplomaQrTokenMutation,
+} from "@/entities/diploma";
+import { useAppSelector } from "@/shared/lib";
+import {
+  buildVerificationLink,
+  createQrDataUrl,
+  downloadDataUrl,
+} from "./share-link-modal/utils";
+import { useMemo, useState } from "react";
+import LinksDesktopTable from "./active-links/LinksDesktopTable";
+import LinksMobileList from "./active-links/LinksMobileList";
+import QrPreviewModal from "./active-links/QrPreviewModal";
+import { mapTokensToRows } from "./active-links/utils";
 
 export default function ActiveLinks() {
   const isMobile = useMediaQuery("(max-width: 64em)");
@@ -49,214 +32,164 @@ export default function ActiveLinks() {
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
 
-  const getStatusStyles = (status: LinkHistoryItem["status"]) => {
-    const isActive = status === "active";
+  const userId = useAppSelector((state) => state.user.id);
+  const { data: tokens = [], isLoading, isFetching } = useGetUserDiplomaTokensQuery(Number(userId), {
+    skip: !userId,
+  });
+  const [revokeDiplomaQrToken, { isLoading: isRevokingToken }] = useRevokeDiplomaQrTokenMutation();
 
-    return {
-      backgroundColor: isActive
-        ? isDark
-          ? "rgba(64, 192, 87, 0.18)"
-          : "var(--mantine-color-green-0)"
-        : isDark
-          ? "rgba(250, 82, 82, 0.18)"
-          : "var(--mantine-color-red-0)",
-      color: isActive
-        ? isDark
-          ? "var(--mantine-color-green-2)"
-          : "var(--mantine-color-green-9)"
-        : isDark
-          ? "var(--mantine-color-red-2)"
-          : "var(--mantine-color-red-9)",
-      padding: "0 16px",
-    };
-  };
+  const [revokingTokenId, setRevokingTokenId] = useState<number | null>(null);
+  const [selectedToken, setSelectedToken] = useState<IUserDiplomaTokenItem | null>(null);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+  const [isQrModalOpened, setIsQrModalOpened] = useState(false);
+  const [isGeneratingQr, setIsGeneratingQr] = useState(false);
 
-  const renderStatusBadge = (status: LinkHistoryItem["status"]) => {
-    switch (status) {
-      case "active":
-        return (
-          <Badge
-            variant="light"
-            radius="xl"
-            size="sm"
-            fw={600}
-            fz={10}
-            miw={110}
-            style={getStatusStyles(status)}
-          >
-            Активна
-          </Badge>
-        );
-      case "revoked":
-        return (
-          <Badge
-            variant="light"
-            radius="xl"
-            size="sm"
-            fw={600}
-            fz={10}
-            miw={110}
-            style={getStatusStyles(status)}
-          >
-            Отозвана
-          </Badge>
-        );
-      case "expired":
-        return (
-          <Badge
-            variant="light"
-            radius="xl"
-            size="sm"
-            fw={600}
-            fz={10}
-            miw={110}
-            style={getStatusStyles(status)}
-          >
-            Истекла
-          </Badge>
-        );
+  const rows = useMemo(() => mapTokensToRows(tokens), [tokens]);
+
+  const handleCopyLink = async (link: string) => {
+    try {
+      await navigator.clipboard.writeText(link);
+      notifications.show({
+        title: "Скопировано",
+        message: "Ссылка добавлена в буфер обмена",
+        color: "green",
+      });
+    } catch {
+      notifications.show({
+        title: "Ошибка",
+        message: "Не удалось скопировать ссылку",
+        color: "red",
+      });
     }
   };
 
+  const handleRevoke = async (tokenId: number) => {
+    try {
+      setRevokingTokenId(tokenId);
+      await revokeDiplomaQrToken(tokenId).unwrap();
+      notifications.show({
+        title: "Токен отозван",
+        message: "Ссылка больше не активна",
+        color: "green",
+      });
+    } catch {
+      notifications.show({
+        title: "Ошибка",
+        message: "Не удалось отозвать токен",
+        color: "red",
+      });
+    } finally {
+      setRevokingTokenId(null);
+    }
+  };
+
+  const handleOpenQr = async (item: IUserDiplomaTokenItem) => {
+    try {
+      setIsGeneratingQr(true);
+      setSelectedToken(item);
+
+      const link = buildVerificationLink(item.token);
+      const qrDataUrl = await createQrDataUrl(link);
+
+      setQrCodeDataUrl(qrDataUrl);
+      setIsQrModalOpened(true);
+    } catch {
+      notifications.show({
+        title: "Ошибка",
+        message: "Не удалось сгенерировать QR-код",
+        color: "red",
+      });
+    } finally {
+      setIsGeneratingQr(false);
+    }
+  };
+
+  const handleDownloadQr = () => {
+    if (!qrCodeDataUrl || !selectedToken) {
+      return;
+    }
+
+    downloadDataUrl(
+      qrCodeDataUrl,
+      `diploma-${selectedToken.diploma.id}-token-${selectedToken.tokenMeta.id}-qr.png`,
+    );
+  };
+
+  const handleCloseQrModal = () => {
+    setIsQrModalOpened(false);
+    setQrCodeDataUrl(null);
+    setSelectedToken(null);
+  };
+
   return (
-    <Paper
-      w="100%"
-      p={{ base: 16, sm: 24, md: 32 }}
-      radius="lg"
-      shadow="sm"
-      withBorder
-    >
-      <Group justify="space-between" align="center" mb="md" wrap="nowrap">
-        <Title order={2} size={isMobile ? "h3" : "h2"} fw={700}>
-          Активные ссылки и история
-        </Title>
-        <Group gap={6} visibleFrom="sm">
-          <IconLock
-            size={14}
-            color={
-              isDark ? theme.other.textSecondaryDark : theme.other.textSecondary
-            }
-          />
-          <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
-            Данные защищены и не передаются третьим лицам
-          </Text>
+    <>
+      <Paper
+        w="100%"
+        p={{ base: 16, sm: 24, md: 32 }}
+        radius="lg"
+        shadow="sm"
+        withBorder
+      >
+        <Group justify="space-between" align="center" mb="md" wrap="nowrap">
+          <Title order={2} size={isMobile ? "h3" : "h2"} fw={700}>
+            Активные ссылки и история
+          </Title>
+          <Group gap={6} visibleFrom="sm">
+            <IconLock
+              size={14}
+              color={
+                isDark ? theme.other.textSecondaryDark : theme.other.textSecondary
+              }
+            />
+            <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
+              Данные защищены и не передаются третьим лицам
+            </Text>
+          </Group>
         </Group>
-      </Group>
 
-      {isMobile ? (
-        <Stack gap={12}>
-          {data.map((row) => (
-            <Paper key={row.id} p={14} radius="md" withBorder>
-              <Stack gap={10}>
-                <Group justify="space-between" align="flex-start" wrap="nowrap">
-                  <Box>
-                    <Text size="xs" c="dimmed">
-                      Диплом
-                    </Text>
-                    <Text fw={600}>{row.diplomaNumber}</Text>
-                  </Box>
-                  {renderStatusBadge(row.status)}
-                </Group>
+        {!userId ? (
+          <Text c="dimmed">Не удалось определить пользователя.</Text>
+        ) : isLoading || isFetching ? (
+          <Text c="dimmed">Загрузка токенов...</Text>
+        ) : rows.length === 0 ? (
+          <Text c="dimmed">Активные ссылки пока не созданы.</Text>
+        ) : isMobile ? (
+          <LinksMobileList
+            rows={rows}
+            isRevokingToken={isRevokingToken}
+            revokingTokenId={revokingTokenId}
+            isGeneratingQr={isGeneratingQr}
+            selectedTokenId={selectedToken?.tokenMeta.id ?? null}
+            onCopy={handleCopyLink}
+            onRevoke={handleRevoke}
+            onOpenQr={handleOpenQr}
+          />
+        ) : (
+          <LinksDesktopTable
+            rows={rows}
+            isRevokingToken={isRevokingToken}
+            revokingTokenId={revokingTokenId}
+            isGeneratingQr={isGeneratingQr}
+            selectedTokenId={selectedToken?.tokenMeta.id ?? null}
+            onCopy={handleCopyLink}
+            onRevoke={handleRevoke}
+            onOpenQr={handleOpenQr}
+          />
+        )}
+      </Paper>
 
-                <Box>
-                  <Text size="xs" c="dimmed">
-                    Ссылка/Токен
-                  </Text>
-                  <Text>{row.token}</Text>
-                </Box>
-
-                <Group justify="space-between" align="center" wrap="nowrap">
-                  <Box>
-                    <Text size="xs" c="dimmed">
-                      Создан
-                    </Text>
-                    <Text>{row.createdAt}</Text>
-                  </Box>
-                  <Box>
-                    <Text size="xs" c="dimmed" ta="right">
-                      Действителен до
-                    </Text>
-                    <Text ta="right">{row.validUntil}</Text>
-                  </Box>
-                </Group>
-
-                <Group grow>
-                  {row.status === "active" ? (
-                    <Button variant="light" size="sm" radius="md" color="red">
-                      Отозвать
-                    </Button>
-                  ) : (
-                    <Button variant="light" size="sm" radius="md" disabled>
-                      Неактивна
-                    </Button>
-                  )}
-                  <ActionIcon
-                    variant="light"
-                    radius="md"
-                    color="gray"
-                    size="lg"
-                  >
-                    <IconEye size={16} />
-                  </ActionIcon>
-                </Group>
-              </Stack>
-            </Paper>
-          ))}
-        </Stack>
-      ) : (
-        <Table.ScrollContainer minWidth={920}>
-          <Table withRowBorders>
-            <Table.Thead>
-              <Table.Tr c="dimmed">
-                <Table.Th>Диплом</Table.Th>
-                <Table.Th>Ссылка/Токен</Table.Th>
-                <Table.Th>Создан</Table.Th>
-                <Table.Th>Действителен до</Table.Th>
-                <Table.Th>Статус</Table.Th>
-                <Table.Th ta="center">Действия</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-
-            <Table.Tbody>
-              {data.map((row) => (
-                <Table.Tr key={row.id}>
-                  <Table.Td fw={600}>{row.diplomaNumber}</Table.Td>
-                  <Table.Td>{row.token}</Table.Td>
-                  <Table.Td>{row.createdAt}</Table.Td>
-                  <Table.Td>{row.validUntil}</Table.Td>
-                  <Table.Td>{renderStatusBadge(row.status)}</Table.Td>
-                  <Table.Td>
-                    <Group gap={8} miw={120} justify="center">
-                      {row.status === "active" ? (
-                        <Button
-                          variant="light"
-                          size="xs"
-                          radius="md"
-                          color="red"
-                        >
-                          Отозвать
-                        </Button>
-                      ) : (
-                        <Text c="dimmed" size="sm" fw={500}>
-                          —
-                        </Text>
-                      )}
-                      <ActionIcon
-                        variant="light"
-                        radius="md"
-                        color="gray"
-                        size="sm"
-                      >
-                        <IconEye size={16} />
-                      </ActionIcon>
-                    </Group>
-                  </Table.Td>
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
-        </Table.ScrollContainer>
-      )}
-    </Paper>
+      <QrPreviewModal
+        opened={isQrModalOpened}
+        onClose={handleCloseQrModal}
+        qrCodeDataUrl={qrCodeDataUrl}
+        link={selectedToken ? buildVerificationLink(selectedToken.token) : ""}
+        onCopy={() =>
+          selectedToken
+            ? handleCopyLink(buildVerificationLink(selectedToken.token))
+            : undefined
+        }
+        onDownload={handleDownloadQr}
+      />
+    </>
   );
 }

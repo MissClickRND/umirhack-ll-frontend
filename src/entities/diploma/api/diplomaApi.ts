@@ -6,6 +6,7 @@ import {
   ICreateDiplomasBatchResponse,
   IDiploma,
   IDiplomaUserToken,
+  IUserDiplomaTokenItem,
   IUniversityDiploma,
   IUniversityDiplomasResponse,
   IUpdateDiplomaStatusPayload,
@@ -108,7 +109,7 @@ export const diplomaApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "Diploma", id: "USER_TOKENS" }],
     }),
 
-    getUserDiplomaTokens: build.query<IDiplomaUserToken[], number>({
+    getUserDiplomaTokens: build.query<IUserDiplomaTokenItem[], number>({
       query: (userId) => `/diplomas/${userId}/list`,
       providesTags: [{ type: "Diploma", id: "USER_TOKENS" }],
     }),

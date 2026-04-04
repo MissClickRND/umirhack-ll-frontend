@@ -1,11 +1,9 @@
-import { Box, Button, Group, Modal, Paper, Radio, Stack, Text, TextInput, ThemeIcon } from "@mantine/core";
+import { Modal, Stack } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import {IconQrcode } from "@tabler/icons-react";
 import { useState } from "react";
 import { useCreateDiplomaQrTokenMutation } from "@/entities/diploma";
 import { Diploma } from "../../model/type";
 import {
-    durationOptions,
     DurationType,
     durationTypeMap,
     PLACEHOLDER_LINK,
@@ -15,6 +13,14 @@ import {
     createQrDataUrl,
     downloadDataUrl,
 } from "./share-link-modal/utils";
+import { isLinkGenerated } from "./share-link-modal/helpers";
+import {
+    DiplomaInfoBlock,
+    DurationSelectorBlock,
+    FooterActions,
+    LinkFieldBlock,
+    QrPreviewBlock,
+} from "./share-link-modal/components";
 
 interface ShareLinkModalProps {
     opened: boolean;
@@ -27,6 +33,13 @@ export default function ShareLinkModal({ opened, close, diploma }: ShareLinkModa
     const [link, setLink] = useState(PLACEHOLDER_LINK);
     const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
     const [createDiplomaQrToken, { isLoading: isGenerating }] = useCreateDiplomaQrTokenMutation();
+
+    const handleClose = () => {
+        setDurationType("one-time");
+        setLink(PLACEHOLDER_LINK);
+        setQrCodeDataUrl(null);
+        close();
+    };
 
     const generateLink = async () => {
         const diplomaId = Number(diploma?.id);
@@ -73,7 +86,7 @@ export default function ShareLinkModal({ opened, close, diploma }: ShareLinkModa
     };
 
     const handleCopy = async () => {
-        if (link === PLACEHOLDER_LINK) {
+        if (!isLinkGenerated(link)) {
             notifications.show({
                 title: "Нет ссылки",
                 message: "Сначала сгенерируйте ссылку",
@@ -106,84 +119,29 @@ export default function ShareLinkModal({ opened, close, diploma }: ShareLinkModa
     return (
         <Modal
             opened={opened}
-            onClose={close}
+            onClose={handleClose}
             title="Создать ссылку проверки"
             centered
             radius="md"
             size={520}
         >
             <Stack gap="md">
-                <Box>
-                    <Text size="sm" fw={600} mb={6}>
-                        Диплом
-                    </Text>
-                    <Paper p="sm" radius="md" bg="gray.0" withBorder>
-                        <Text size="sm" fw={600} lineClamp={1}>
-                            {diploma
-                                ? `${diploma.diplomaNumber} - ${diploma.institution} - ${diploma.specialty}`
-                                : ""}
-                        </Text>
-                    </Paper>
-                </Box>
+                <DiplomaInfoBlock diploma={diploma} />
 
-                <Box>
-                    <Text size="sm" fw={600} mb={8}>
-                        Срок действия ссылки
-                    </Text>
-                    <Radio.Group value={durationType} onChange={(value) => setDurationType(value as DurationType)}>
-                        <Stack gap={8}>
-                            {durationOptions.map((option) => (
-                                <Radio key={option.value} value={option.value} label={option.label} />
-                            ))}
-                        </Stack>
-                    </Radio.Group>
-                    <Text size="xs" c="dimmed" mt={4}>
-                        Ссылка автоматически деактивируется после истечения срока
-                    </Text>
-                </Box>
+                <DurationSelectorBlock
+                    durationType={durationType}
+                    onChange={setDurationType}
+                />
 
-                <Paper h={140} radius="md" withBorder bg="gray.0">
-                    <Stack h="100%" align="center" justify="center" gap={4}>
-                        {qrCodeDataUrl ? (
-                            <img src={qrCodeDataUrl} alt="QR code" style={{ width: 120, height: 120 }} />
-                        ) : (
-                            <>
-                                <ThemeIcon size={42} variant="light" radius="md" color="gray">
-                                    <IconQrcode size={24} />
-                                </ThemeIcon>
-                                <Text size="xs" c="dimmed" fw={600}>
-                                    QR КОД
-                                </Text>
-                            </>
-                        )}
-                    </Stack>
-                </Paper>
+                <QrPreviewBlock qrCodeDataUrl={qrCodeDataUrl} onDownload={handleDownloadQr} />
 
-                <Button variant="light" radius="md" onClick={handleDownloadQr}>
-                    Скачать QR
-                </Button>
+                <LinkFieldBlock link={link} onCopy={handleCopy} />
 
-                <Box>
-                    <Text size="sm" fw={600} mb={6}>
-                        Ссылка для проверки
-                    </Text>
-                    <Group gap="xs" wrap="nowrap">
-                        <TextInput value={link} readOnly style={{ flex: 1 }} />
-                        <Button variant="filled" color="blue" radius="md" onClick={handleCopy}>
-                            Копировать
-                        </Button>
-                    </Group>
-                </Box>
-
-
-                <Group grow mt={4}>
-                    <Button variant="light" color="gray" radius="md" onClick={close}>
-                        Отмена
-                    </Button>
-                    <Button variant="filled" color="brand" radius="md" onClick={generateLink} loading={isGenerating}>
-                        Сгенерировать
-                    </Button>
-                </Group>
+                <FooterActions
+                    isGenerating={isGenerating}
+                    onCancel={handleClose}
+                    onGenerate={generateLink}
+                />
             </Stack>
         </Modal>
     );
