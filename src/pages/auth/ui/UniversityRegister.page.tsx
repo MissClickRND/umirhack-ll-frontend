@@ -200,7 +200,7 @@ export default function UniversityRegister() {
                 <Anchor
                   c={"primary"}
                   fw={500}
-                  onClick={() => navigate("/auth/login")}
+                  onClick={() => navigate("/account/login")}
                   style={{ cursor: "pointer" }}
                 >
                   Войти

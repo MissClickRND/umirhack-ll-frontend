@@ -105,7 +105,7 @@ export default function Login() {
             <Anchor
               c={"primary"}
               fw={500}
-              onClick={() => navigate("/auth/register")}
+              onClick={() => navigate("/account/register")}
               style={{ cursor: "pointer" }}
             >
               Зарегистрироваться

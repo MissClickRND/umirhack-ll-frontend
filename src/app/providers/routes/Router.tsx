@@ -38,30 +38,30 @@ const router = createBrowserRouter([
         element: <EduPanelPage />,
       },
       {
-        path: '/:token',
+        path: "/:token",
         element: <ResultPage />,
-      }
+      },
     ],
   },
 
   {
-    path: "/auth",
+    path: "/account",
     element: <AuthPage />,
     children: [
       {
-        path: "/auth/login",
+        path: "/account/login",
         element: <Login />,
       },
       {
-        path: "/auth/register",
+        path: "/account/register",
         element: <Choose />,
       },
       {
-        path: "/auth/register/student",
+        path: "/account/register/student",
         element: <StudentRegister />,
       },
       {
-        path: "/auth/register/university",
+        path: "/account/register/university",
         element: <UniversityRegister />,
       },
     ],

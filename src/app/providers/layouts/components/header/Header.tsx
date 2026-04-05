@@ -16,9 +16,12 @@ import ProfileButton from "./components/ProfileButton";
 import NavList from "./components/NavList";
 import Logo from "./components/Logo";
 import { useLocation, useNavigate } from "react-router-dom";
-import { links } from "../../model/helper";
+import { canAccessLink, links } from "../../model/helper";
+import { selectUser } from "@/entities/user/model/userSelectors";
+import { useAppSelector } from "@/shared/lib";
 
 export default function Header() {
+  const user = useAppSelector(selectUser);
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
@@ -65,40 +68,42 @@ export default function Header() {
 
           <Collapse in={opened} hiddenFrom="sm">
             <Stack gap="xs" pt="sm" pb="xs">
-              {links.map((link) => {
-                const isActive = location.pathname === link.path;
+              {links
+                .filter((link) => canAccessLink(link, user?.role))
+                .map((link) => {
+                  const isActive = location.pathname === link.path;
 
-                return (
-                  <UnstyledButton
-                    key={link.path}
-                    onClick={() => handleNavigate(link.path)}
-                    style={{
-                      borderRadius: 8,
-                      padding: "10px 12px",
-                      backgroundColor: isActive
-                        ? isDark
-                          ? "var(--mantine-color-primaryDark-8)"
-                          : "var(--mantine-color-primary-0)"
-                        : "transparent",
-                    }}
-                  >
-                    <Text
-                      fw={isActive ? 600 : 500}
-                      c={
-                        isActive
+                  return (
+                    <UnstyledButton
+                      key={link.path}
+                      onClick={() => handleNavigate(link.path)}
+                      style={{
+                        borderRadius: 8,
+                        padding: "10px 12px",
+                        backgroundColor: isActive
                           ? isDark
-                            ? "primaryDark.2"
-                            : "primary.7"
-                          : isDark
-                            ? theme.other.textPrimaryDark
-                            : theme.other.textPrimary
-                      }
+                            ? "var(--mantine-color-primaryDark-8)"
+                            : "var(--mantine-color-primary-0)"
+                          : "transparent",
+                      }}
                     >
-                      {link.label}
-                    </Text>
-                  </UnstyledButton>
-                );
-              })}
+                      <Text
+                        fw={isActive ? 600 : 500}
+                        c={
+                          isActive
+                            ? isDark
+                              ? "primaryDark.2"
+                              : "primary.7"
+                            : isDark
+                              ? theme.other.textPrimaryDark
+                              : theme.other.textPrimary
+                        }
+                      >
+                        {link.label}
+                      </Text>
+                    </UnstyledButton>
+                  );
+                })}
 
               <Divider my="sm" />
               <ProfileButton />

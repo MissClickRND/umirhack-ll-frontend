@@ -62,6 +62,7 @@ export default function Description() {
         </Group>
 
         <Text
+          visibleFrom="sm"
           size={isMobile ? "md" : "lg"}
           c={isDark ? theme.other.textSecondaryDark : theme.other.textSecondary}
           lh={1.6}
@@ -70,7 +71,7 @@ export default function Description() {
           образовании в едином защищённом пространстве.
         </Text>
 
-        <Stack gap={featuresGap}>
+        <Stack gap={featuresGap} visibleFrom="sm">
           <FeatureItem
             icon={<IconDatabase />}
             title="Единая база"

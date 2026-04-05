@@ -86,7 +86,7 @@ export default function ProfileButton() {
           variant="filled"
           color={isDark ? "primaryDark" : "primary"}
           leftSection={<IconUser size={18} />}
-          onClick={() => navigate("/auth/login")}
+          onClick={() => navigate("/account/login")}
           radius={"md"}
         >
           Войти

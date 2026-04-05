@@ -8,7 +8,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
-import { links } from "../../../model/helper";
+import { canAccessLink, links } from "../../../model/helper";
 
 export default function NavList() {
   const user = useAppSelector(selectUser);
@@ -21,7 +21,7 @@ export default function NavList() {
   return (
     <Group gap={32} visibleFrom="sm" style={{ height: "100%" }}>
       {links
-        .filter((link) => !link.role || link.role === user?.role)
+        .filter((link) => canAccessLink(link, user?.role))
         .map((link) => {
           const isActive = link.path === location.pathname;
           return (

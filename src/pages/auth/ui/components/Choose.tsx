@@ -35,14 +35,14 @@ export default function Choose() {
 
           <Stack gap={16}>
             <LoginOptionCard
-              link="/auth/register/student"
+              link="/account/register/student"
               icon={<IconSchool />}
               title="Студент"
               description="Проверка своих документов об образовании"
               color="secondary"
             />
             <LoginOptionCard
-              link="/auth/register/university"
+              link="/account/register/university"
               icon={<IconBuildingBank />}
               title="Учебное заведение"
               description="Управление записями и выдача документов"
