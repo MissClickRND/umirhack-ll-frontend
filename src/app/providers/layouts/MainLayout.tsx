@@ -4,7 +4,7 @@ import Header from "./components/header/Header";
 
 export default function MainLayout() {
   return (
-    <Box style={{ display: "flex", flexDirection: "column" }}>
+    <Box style={{ minheight: "100dvh", display: "flex", flexDirection: "column" }}>
       <Header />
       <Box
         component="main"
