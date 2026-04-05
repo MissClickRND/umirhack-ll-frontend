@@ -80,11 +80,14 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
         message: `Номер ${diploma.registrationNumber}`,
         color: "green",
       });
-    } catch {
+    } catch (e: any) {
       onResult(null);
       notifications.show({
         title: "Диплом не найден",
-        message: "Проверьте номер, ФИО и попробуйте снова",
+        message:
+          e.statusCode === 429
+            ? "Слишком много попыток. Попробуйте позже."
+            : "Проверьте номер, ФИО и попробуйте снова",
         color: "red",
       });
     }
