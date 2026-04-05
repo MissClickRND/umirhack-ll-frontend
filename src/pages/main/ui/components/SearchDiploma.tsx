@@ -22,6 +22,59 @@ interface SearchDiplomaProps {
   onResult: (diploma: IDiploma | null) => void;
 }
 
+type SearchErrorPayload = {
+  message?: string | string[];
+  statusCode?: number;
+  details?: {
+    message?: string | string[];
+    statusCode?: number;
+  };
+};
+
+type SearchErrorLike = {
+  status?: number | string;
+  message?: string;
+  data?: SearchErrorPayload;
+};
+
+function pickFirstMessage(value?: string | string[]) {
+  if (Array.isArray(value)) {
+    return value[0] ?? "";
+  }
+
+  return value ?? "";
+}
+
+function extractSearchError(error: unknown) {
+  const fallback = {
+    statusCode: undefined as number | undefined,
+    message: "",
+  };
+
+  if (!error || typeof error !== "object") {
+    return fallback;
+  }
+
+  const parsed = error as SearchErrorLike;
+  const statusCodeFromError =
+    typeof parsed.status === "number" ? parsed.status : undefined;
+  const statusCode =
+    parsed.data?.statusCode ??
+    parsed.data?.details?.statusCode ??
+    statusCodeFromError;
+
+  const message =
+    pickFirstMessage(parsed.data?.message) ||
+    pickFirstMessage(parsed.data?.details?.message) ||
+    parsed.message ||
+    "";
+
+  return {
+    statusCode,
+    message,
+  };
+}
+
 export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
   const [numberValue, setNumberValue] = useState("");
   const [fullName, setFullName] = useState("");
@@ -80,14 +133,25 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
         message: `Номер ${diploma.registrationNumber}`,
         color: "green",
       });
-    } catch (e: any) {
+    } catch (e) {
       onResult(null);
+
+      const { statusCode, message } = extractSearchError(e);
+      const normalizedMessage = message.toLowerCase();
+      const isRateLimited =
+        statusCode === 403 &&
+        (normalizedMessage.includes("too many attempts") ||
+          normalizedMessage.includes("blocked"));
+      const isDiplomaNotFound =
+        statusCode === 404 || normalizedMessage.includes("diploma not found");
+
       notifications.show({
-        title: "Диплом не найден",
-        message:
-          e.message === "Too many attempts. Try later"
-            ? "Слишком много попыток. Попробуйте позже."
-            : "Проверьте номер, ФИО и попробуйте снова",
+        title: isRateLimited ? "Слишком много попыток" : "Диплом не найден",
+        message: isRateLimited
+          ? "Слишком много попыток. Попробуйте позже."
+          : isDiplomaNotFound
+            ? "Проверьте номер, ФИО и попробуйте снова"
+            : message || "Не удалось выполнить проверку. Попробуйте еще раз.",
         color: "red",
       });
     }
