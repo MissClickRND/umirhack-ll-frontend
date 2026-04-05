@@ -85,7 +85,7 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
       notifications.show({
         title: "Диплом не найден",
         message:
-          e.statusCode === 429
+          e.message === "Too many attempts. Try later"
             ? "Слишком много попыток. Попробуйте позже."
             : "Проверьте номер, ФИО и попробуйте снова",
         color: "red",
