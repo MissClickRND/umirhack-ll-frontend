@@ -136,7 +136,7 @@ export default function StudentRegister() {
           >
             Уже есть аккаунт?{" "}
             <Anchor
-              c={isDark ? "primaryDark.4" : "primary.6"}
+              c={"primary"}
               fw={500}
               onClick={() => navigate("/auth/login")}
               style={{ cursor: "pointer" }}

@@ -8,6 +8,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
+import { links } from "../../../model/helper";
 
 export default function NavList() {
   const user = useAppSelector(selectUser);
@@ -16,13 +17,6 @@ export default function NavList() {
   const isDark = colorScheme === "dark";
   const location = useLocation();
   const navigate = useNavigate();
-  const links = [
-    { label: "Главная", path: "/" },
-    { label: "Интеграция API", path: "/public-api" },
-    { label: "Личный кабинет", path: "/student", role: "STUDENT" },
-    { label: "Панель администратора", path: "/admin", role: "ADMIN" },
-    { label: "Панель управления", path: "/edu-panel", role: "UNIVERSITY" },
-  ];
 
   return (
     <Group gap={32} visibleFrom="sm" style={{ height: "100%" }}>

@@ -110,10 +110,8 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
           </Stack>
 
           <Stack gap={8}>
-            <Text ta="left" size="sm" fw={500}>
-              Идентификатор документа
-            </Text>
             <TextInput
+              label="Номер диплома"
               placeholder="123456 7890123"
               value={numberValue}
               onChange={(e) =>
@@ -129,14 +127,9 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
               size="md"
               radius="md"
             />
-            <Group justify="flex-start" gap={4}>
-              <IconAlertCircle size={14} color="var(--mantine-color-dimmed)" />
-              <Text size="xs" c="dimmed">
-                Проверка происходит мгновенно
-              </Text>
-            </Group>
 
             <TextInput
+              label="ФИО владельца"
               mt={8}
               placeholder="Иванов Иван Иванович"
               value={fullName}
@@ -150,6 +143,12 @@ export default function SearchDiploma({ onResult }: SearchDiplomaProps) {
               size="md"
               radius="md"
             />
+            <Group justify="flex-start" gap={4}>
+              <IconAlertCircle size={14} color="var(--mantine-color-dimmed)" />
+              <Text size="xs" c="dimmed">
+                Проверка происходит мгновенно
+              </Text>
+            </Group>
           </Stack>
 
           <Button

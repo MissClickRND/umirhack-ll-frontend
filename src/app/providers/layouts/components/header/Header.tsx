@@ -16,11 +16,7 @@ import ProfileButton from "./components/ProfileButton";
 import NavList from "./components/NavList";
 import Logo from "./components/Logo";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const links = [
-  { label: "Проверка", path: "/" },
-  { label: "Интеграция API", path: "/public-api" },
-];
+import { links } from "../../model/helper";
 
 export default function Header() {
   const theme = useMantineTheme();

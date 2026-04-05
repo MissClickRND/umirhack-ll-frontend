@@ -44,7 +44,6 @@ export default function ProfileButton() {
                       ? theme.other.textPrimaryDark
                       : theme.other.textPrimary
                   }
-                  visibleFrom="sm"
                 >
                   {user?.email}
                 </Text>
