@@ -73,7 +73,14 @@ export default function ProfileButton() {
             </Menu.Item>
             <Menu.Item
               leftSection={<IconLogout size={18} />}
-              onClick={() => dispatch(userLogout(), logout())}
+              onClick={async () => {
+                try {
+                  await logout().unwrap();
+                } finally {
+                  dispatch(userLogout());
+                  navigate("/");
+                }
+              }}
               color="red"
             >
               Выйти

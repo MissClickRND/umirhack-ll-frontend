@@ -19,6 +19,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useLoginMutation } from "@/entities/auth";
+import TestLoginRolePicker from "./components/TestLoginRolePicker";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -70,6 +71,13 @@ export default function Login() {
 
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack gap="md">
+              <TestLoginRolePicker
+                onPick={({ email, password }) => {
+                  form.setValues({ email, password });
+                  form.clearErrors();
+                }}
+              />
+
               <TextInput
                 size="md"
                 label="Email"
