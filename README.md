@@ -1,62 +1,121 @@
-# Frontend Lyaguh Template
+# Umirhack Diploma Frontend
 
-Шаблон моих проектов для быстрого создания
+Frontend-приложение для проверки и управления дипломами.
 
-Установленные библиотеки :
-- React + TS
-- RTK
-- MantineUI
-- ReactRouter
-- TablerIcons (Первая загрузка может быть долгим из-за этой библиотеки, если вы сталкиваетесь с проблемой производительности можете попробовать заменить ее на похожие, по типу ReactIcons)
+## Технологии
 
-Создана архитектура FSD, настроен роутинг
+- React 19 + TypeScript
+- Vite 6
+- Redux Toolkit + RTK Query
+- React Router
+- Mantine UI
 
-Архитектура:
+## Возможности
 
-Классический FSD:
-```text
-Lyaguh-Template
-├─ index.html
-├─ package-lock.json
-├─ package.json
-├─ postcss.config.cjs
-├─ public
-│  ├─ favicon.svg
-│  ├─ icons
-│  └─ img
-├─ README.md
-├─ src
-│  ├─ app
-│  │  ├─ main.tsx
-│  │  ├─ providers
-│  │  │  ├─ store
-│  │  │  │  ├─ listeners
-│  │  │  │  ├─ listenersMiddleware.ts
-│  │  │  │  ├─ loadStates
-│  │  │  │  │  └─ loadSettingsState.ts
-│  │  │  │  └─ store.ts
-│  │  │  └─ styles
-│  │  │     └─ index.css
-│  │  ├─ theme.ts
-│  │  └─ vite-env.d.ts
-│  ├─ pages
-│  │  ├─ Errors
-│  │  │  └─ Error404
-│  │  │     ├─ Error404.page.tsx
-│  │  │     └─ index.ts
-│  │  └─ Main
-│  │     ├─ index.ts
-│  │     └─ Main.page.tsx
-│  ├─ shared
-│  │  └─ lib
-│  │     ├─ index.ts
-│  │     └─ store.ts
-│  └─ widgets
-│     └─ Read.txt
-├─ tsconfig.json
-├─ tsconfig.node.json
-├─ vite.config.ts
+- Публичная проверка диплома по номеру
+- Проверка диплома по QR/token ссылке
+- Авторизация и регистрация (студент/университет)
+- Личный кабинет студента
+- Панель университета
+- Админ-панель (управление пользователями и заявками на верификацию)
+- Страница документации публичного API внутри приложения
 
+## Запуск проекта
 
+### 1. Установка зависимостей
+
+```bash
+npm install
 ```
 
+### 2. Настройка переменных окружения
+
+Создайте файл `.env` в корне проекта:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+`VITE_API_URL` должен указывать на backend API (без завершающего `/`).
+
+### 3. Запуск в режиме разработки
+
+```bash
+npm run dev
+```
+
+По умолчанию Vite запускается с `--host`.
+
+### 4. Сборка production
+
+```bash
+npm run build
+```
+
+### 5. Предпросмотр production-сборки
+
+```bash
+npm run preview
+```
+
+### 6. Проверка типов
+
+```bash
+npm run typecheck
+```
+
+## Скрипты npm
+
+- `npm run dev` - запуск dev-сервера
+- `npm run build` - production-сборка
+- `npm run preview` - локальный предпросмотр сборки
+- `npm run typecheck` - проверка TypeScript без генерации файлов
+
+## Основные маршруты
+
+### Публичные
+
+- `/` - главная страница
+- `/public-api` - страница с документацией публичного API
+- `/:token` - просмотр результата по токену/QR
+- `/account/login` - вход
+- `/account/register` - выбор типа регистрации
+- `/account/register/student` - регистрация студента
+- `/account/register/university` - регистрация университета
+
+### Ролевые разделы
+
+- `/student` - кабинет студента
+- `/edu-panel` - панель университета
+- `/admin` - админ-панель
+
+### Служебные
+
+- `*` - страница 404
+
+## Архитектура
+
+Проект организован по слоям, близким к FSD-подходу:
+
+- `src/app` - инициализация приложения, тема, роутер, глобальные провайдеры
+- `src/entities` - доменные сущности и API-слой (RTK Query endpoints)
+- `src/pages` - страницы приложения и их UI-компоненты
+- `src/shared` - общие утилиты, API-база, хуки, store-инструменты
+
+Алиас `@` указывает на папку `src`.
+
+## Работа с API
+
+- Базовый API построен на RTK Query
+- Включены `credentials: "include"` для cookie-based авторизации
+- Реализован авто-refresh при `401` через запрос `/auth/refresh`
+- При неуспешном refresh выполняется logout пользователя
+
+## Требования
+
+- Node.js 18+ (рекомендуется LTS)
+- npm 9+
+
+## Деплой
+
+https://miss-click.ru
